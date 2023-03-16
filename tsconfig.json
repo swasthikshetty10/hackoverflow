@@ -28,6 +28,6 @@
     "**/*.tsx",
     "**/*.cjs",
     "**/*.mjs"
-  ],
+, "src/server/api/routers/pushetrts"  ],
   "exclude": ["node_modules"]
 }
