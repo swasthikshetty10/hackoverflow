@@ -48,13 +48,15 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Room          Room[]
+  Participant   Participant[]
 }
 
 model VerificationToken {
@@ -63,4 +65,31 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Room {
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  name        String
+  OwnerId     String
+  Owner       User          @relation(fields: [OwnerId], references: [id], onDelete: Cascade)
+  summary     String?       @db.Text
+  Participant Participant[]
+  token       String        @unique
+
+  @@index([OwnerId])
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  UserId    String
+  User      User     @relation(fields: [UserId], references: [id], onDelete: Cascade)
+  RoomId    String
+  Room      Room     @relation(fields: [RoomId], references: [id], onDelete: Cascade)
+
+  @@index([UserId])
+  @@index([RoomId])
 }
