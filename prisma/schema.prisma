@@ -72,6 +72,7 @@ model Room {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   name        String
+  metadata    String?       @db.Text
   OwnerId     String
   Owner       User          @relation(fields: [OwnerId], references: [id], onDelete: Cascade)
   summary     String?       @db.Text
