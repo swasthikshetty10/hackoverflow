@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
-import styles from "../styles/Home.module.css";
 
 function ConnectionTab() {
   const [liveKitUrl, setLiveKitUrl] = useState<string | undefined>();
@@ -13,32 +12,32 @@ function ConnectionTab() {
     router.push(`/custom/?liveKitUrl=${liveKitUrl}&token=${token}`);
   };
   return (
-    <div className={styles.tabContent}>
-      <input
-        type="url"
-        placeholder="URL"
-        onChange={(ev) => setLiveKitUrl(ev.target.value)}
-      ></input>
-      <input
-        type="text"
-        placeholder="Token"
-        onChange={(ev) => setToken(ev.target.value)}
-      ></input>
-      <hr
-        style={{
-          width: "100%",
-          borderColor: "rgba(255, 255, 255, 0.15)",
-          marginBlock: "1rem",
-        }}
-      />
-      <button
-        style={{
-          paddingInline: "1.25rem",
-          width: "100%",
-        }}
-        className="lk-button"
-        onClick={join}
-      >
+    <div className="flex h-full w-full flex-col items-center justify-center space-y-4 p-4">
+      <h1 className="text-4xl font-bold">Jab We Meet</h1>
+
+      <p className="text-sm text-gray-400">
+        Multilingual Video Conferencing App
+      </p>
+
+      <div className="flex flex-col space-y-1 rounded-lg border border-gray-400 p-5">
+        <label className="text-sm font-medium text-gray-400">LiveKit URL</label>
+        <input
+          type="url"
+          placeholder="URL"
+          className="rounded-lg"
+          onChange={(ev) => setLiveKitUrl(ev.target.value)}
+        ></input>
+
+        <label className="text-sm font-medium text-gray-400">Token</label>
+        <input
+          type="text"
+          placeholder="Token"
+          className="rounded-lg"
+          onChange={(ev) => setToken(ev.target.value)}
+        ></input>
+      </div>
+
+      <button className="lk-button" onClick={join}>
         Connect
       </button>
     </div>
@@ -48,7 +47,7 @@ function ConnectionTab() {
 const Home: NextPage = () => {
   return (
     <>
-      <main className={styles.main} data-lk-theme="default">
+      <main data-lk-theme="default">
         <ConnectionTab />
       </main>
     </>
