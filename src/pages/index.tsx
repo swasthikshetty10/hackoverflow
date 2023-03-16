@@ -20,6 +20,7 @@ const Home: NextPage = () => {
     const channel = pusher.subscribe("chat");
 
     channel.bind("chat-event", function (data: { sender: any; message: any }) {
+      console.log(data);
       setChats((prevState) => [
         ...prevState,
         { sender: data.sender, message: data.message },
@@ -30,6 +31,9 @@ const Home: NextPage = () => {
       pusher.unsubscribe("chat");
     };
   }, []);
+  useEffect(() => {
+    console.log(chats);
+  }, [chats]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
