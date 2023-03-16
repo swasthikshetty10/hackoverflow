@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 import { AccessToken } from "livekit-server-sdk";
 import type { AccessTokenOptions, VideoGrant } from "livekit-server-sdk";
 const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
@@ -22,7 +22,6 @@ export const roomsRouter = createTRPCRouter({
     .input(
       z.object({
         roomName: z.string(),
-        name: z.string(),
         metadata: z.string(),
       })
     )
@@ -31,6 +30,7 @@ export const roomsRouter = createTRPCRouter({
         throw new Error("Invalid room name");
       }
       const identity = ctx.session.user.id;
+      const name = ctx.session.user.name;
 
       const grant: VideoGrant = {
         room: input.roomName,
@@ -39,9 +39,12 @@ export const roomsRouter = createTRPCRouter({
         canPublishData: true,
         canSubscribe: true,
       };
-      const { name, metadata } = input;
+      const { roomName, metadata } = input;
 
-      const token = createToken({ identity, name, metadata }, grant);
+      const token = createToken(
+        { identity, name: name as string, metadata },
+        grant
+      );
       const result: TokenResult = {
         identity,
         accessToken: token,
