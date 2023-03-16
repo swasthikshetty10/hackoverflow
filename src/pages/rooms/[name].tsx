@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
 import { useServerUrl } from "../../lib/client-utils";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Jab We Meet</title>
+        <title>LiveKit Meet</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -70,17 +71,12 @@ type ActiveRoomProps = {
   onLeave?: () => void;
 };
 const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
-  const token = useToken(process.env.NEXT_PUBLIC_LK_TOKEN_ENDPOINT, roomName, {
-    userInfo: {
-      identity: userChoices.username,
-      name: userChoices.username,
-    },
-  });
+  const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
   const router = useRouter();
   const { region, hq } = router.query;
 
-  const liveKitUrl = useServerUrl(region as string | undefined);
+  //   const liveKitUrl = useServerUrl(region as string | undefined);
 
   const roomOptions = useMemo((): RoomOptions => {
     return {
@@ -104,10 +100,10 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
 
   return (
     <>
-      {liveKitUrl && (
+      {data && (
         <LiveKitRoom
-          token={token}
-          serverUrl={liveKitUrl}
+          token={data.accessToken}
+          serverUrl={"https://transuii-q8v8i1ek.livekit.cloud"}
           options={roomOptions}
           video={userChoices.videoEnabled}
           audio={userChoices.audioEnabled}

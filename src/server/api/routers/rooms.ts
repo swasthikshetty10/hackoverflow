@@ -1,6 +1,11 @@
 import { string, z } from "zod";
-import { AccessToken } from "livekit-server-sdk";
-import type { AccessTokenOptions, VideoGrant } from "livekit-server-sdk";
+import { AccessToken, RoomServiceClient } from "livekit-server-sdk";
+import type {
+  AccessTokenOptions,
+  VideoGrant,
+  CreateOptions,
+} from "livekit-server-sdk";
+
 const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   const at = new AccessToken(apiKey, apiSecret, userInfo);
   at.ttl = "5m";
@@ -10,25 +15,23 @@ const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
 const roomPattern = /\w{4}\-\w{4}/;
 const apiKey = process.env.LIVEKIT_API_KEY;
 const apiSecret = process.env.LIVEKIT_API_SECRET;
+const apiHost = process.env.LIVEKIT_API_HOST as string;
 import {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
 import { TokenResult } from "~/lib/type";
-
+import { CreateRoomRequest } from "livekit-server-sdk/dist/proto/livekit_room";
+const roomClient = new RoomServiceClient(apiHost, apiKey, apiSecret);
 export const roomsRouter = createTRPCRouter({
   joinRoom: protectedProcedure
     .input(
       z.object({
         roomName: z.string(),
-        metadata: z.string(),
       })
     )
-    .mutation(({ input, ctx }) => {
-      if (!input.roomName.match(roomPattern)) {
-        throw new Error("Invalid room name");
-      }
+    .query(({ input, ctx }) => {
       const identity = ctx.session.user.id;
       const name = ctx.session.user.name;
 
@@ -39,58 +42,46 @@ export const roomsRouter = createTRPCRouter({
         canPublishData: true,
         canSubscribe: true,
       };
-      const { roomName, metadata } = input;
+      const { roomName } = input;
 
-      const token = createToken(
-        { identity, name: name as string, metadata },
-        grant
-      );
+      const token = createToken({ identity, name: name as string }, grant);
       const result: TokenResult = {
         identity,
         accessToken: token,
       };
-      const room = ctx.prisma.room.create({
-        data: {
-          name: input.roomName,
-          Owner: {
-            connect: {
-              id: ctx.session.user.id,
-            },
-          },
-          token: token,
-          metadata: input.metadata,
-        },
-      });
 
       return result;
     }),
-  createRoom: protectedProcedure.mutation(({ ctx }) => {
+  createRoom: protectedProcedure.mutation(async ({ ctx }) => {
     const identity = ctx.session.user.id;
     const name = ctx.session.user.name;
-    const roomName = Math.random().toString(36).substring(2, 6);
+    const room = await ctx.prisma.room.create({
+      data: {
+        Owner: {
+          connect: {
+            id: ctx.session.user.id,
+          },
+        },
+      },
+    });
+    await roomClient.createRoom({
+      name: room.name,
+    });
+
     const grant: VideoGrant = {
-      room: roomName,
+      room: room.name,
       roomJoin: true,
       canPublish: true,
       canPublishData: true,
       canSubscribe: true,
     };
     const token = createToken({ identity, name: name as string }, grant);
-    const result: TokenResult = {
+    const result = {
+      roomName: room.name,
       identity,
       accessToken: token,
     };
-    const room = ctx.prisma.room.create({
-      data: {
-        name: roomName,
-        Owner: {
-          connect: {
-            id: ctx.session.user.id,
-          },
-        },
-        token: token,
-      },
-    });
+
     return result;
   }),
 });
