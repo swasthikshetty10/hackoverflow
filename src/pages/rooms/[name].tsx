@@ -7,11 +7,14 @@ import {
   formatChatMessageLinks,
 } from "@livekit/components-react";
 import { LogLevel, RoomOptions, VideoPresets } from "livekit-client";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
 import { useServerUrl } from "../../lib/client-utils";
 import { api } from "~/utils/api";
@@ -75,6 +78,40 @@ type ActiveRoomProps = {
   region?: string;
   onLeave?: () => void;
 };
+
+const Transcriptions = ({ audioEnabled }: { audioEnabled: boolean }) => {
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    finalTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+
+
+  useEffect(() => {
+    if (finalTranscript !== '') {
+      resetTranscript();
+    }
+  }, [finalTranscript, resetTranscript]);
+
+  useEffect(() => {
+    if (audioEnabled) {
+      SpeechRecognition.startListening({ continuous: true });
+    }
+  }, [audioEnabled]);
+
+  if (!browserSupportsSpeechRecognition || !audioEnabled) {
+    return null;
+  }
+
+  return (
+    <div className="bg-black p-4 text-center">
+      <a>{transcript}</a>
+    </div>
+  );
+};
+
 const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
@@ -114,6 +151,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
         >
+          <Transcriptions audioEnabled={userChoices.audioEnabled} />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
