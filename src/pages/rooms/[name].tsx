@@ -19,6 +19,7 @@ import { DebugMode } from "../../lib/Debug";
 import { useServerUrl } from "../../lib/client-utils";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
+import Pusher from "pusher-js";
 
 // THis is join room page, provide room name to join as a participant
 
@@ -79,7 +80,13 @@ type ActiveRoomProps = {
   onLeave?: () => void;
 };
 
-const Transcriptions = ({ audioEnabled }: { audioEnabled: boolean }) => {
+const Transcriptions = ({
+  audioEnabled,
+  roomName,
+}: {
+  audioEnabled: boolean;
+  roomName: string;
+}) => {
   const {
     transcript,
     listening,
@@ -88,9 +95,8 @@ const Transcriptions = ({ audioEnabled }: { audioEnabled: boolean }) => {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
-
   useEffect(() => {
-    if (finalTranscript !== '') {
+    if (finalTranscript !== "") {
       resetTranscript();
     }
   }, [finalTranscript, resetTranscript]);
@@ -100,6 +106,17 @@ const Transcriptions = ({ audioEnabled }: { audioEnabled: boolean }) => {
       SpeechRecognition.startListening({ continuous: true });
     }
   }, [audioEnabled]);
+
+  const pusherMutation = api.pusher.send.useMutation();
+
+  useEffect(() => {
+    if (transcript != "") {
+      pusherMutation.mutate({
+        message: transcript,
+        roomName: roomName,
+      });
+    }
+  }, [transcript, roomName]);
 
   if (!browserSupportsSpeechRecognition || !audioEnabled) {
     return null;
@@ -140,6 +157,34 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     };
   }, [userChoices, hq]);
 
+  const [transcripts, setTranscripts] = useState<
+    {
+      sender: string;
+      message: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
+      cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
+    });
+
+    const channel = pusher.subscribe(roomName);
+    channel.bind(
+      "transcribe-event",
+      function (data: { sender: string; message: string }) {
+        console.info("heree",data);
+        setTranscripts((prev) =>
+         prev.find((t)=>t.sender === data.sender) ? prev.map((t) =>
+            t.sender === data.sender
+              ? { sender: data.sender, message: data.message }
+              : t
+          ) : [...prev, data]
+        );
+      }
+    );
+  }, []);
+
   return (
     <>
       {data && (
@@ -151,7 +196,10 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
         >
-          <Transcriptions audioEnabled={userChoices.audioEnabled} />
+          <Transcriptions
+            roomName={roomName}
+            audioEnabled={userChoices.audioEnabled}
+          />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
