@@ -13,9 +13,7 @@ function ConnectionTab() {
   ); // hard coded for testing
   const createRoom = api.rooms.createRoom.useMutation();
   const router = useRouter();
-  const join = () => {
-    router.push(`/custom/?liveKitUrl=${liveKitUrl}&token=${token}`);
-  };
+
   const createRoomHandler = async () => {
     const data = await createRoom.mutateAsync();
     router.push(`/rooms/${data.roomName}`);
@@ -31,10 +29,6 @@ function ConnectionTab() {
 
       <button onClick={createRoomHandler} className="lk-button">
         Create Room
-      </button>
-
-      <button className="lk-button" onClick={join}>
-        Connect
       </button>
     </div>
   );
