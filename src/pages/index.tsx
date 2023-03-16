@@ -5,8 +5,12 @@ import { useState } from "react";
 import { api } from "~/utils/api";
 
 function ConnectionTab() {
-  const [liveKitUrl, setLiveKitUrl] = useState<string | undefined>();
-  const [token, setToken] = useState<string | undefined>();
+  const [liveKitUrl, setLiveKitUrl] = useState<string | undefined>(
+    "wss://demo.livekit.cloud"
+  ); // hard coded for testing
+  const [token, setToken] = useState<string | undefined>(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2aWRlbyI6eyJyb29tSm9pbiI6dHJ1ZSwicm9vbSI6InRvd2VyIiwiY2FuUHVibGlzaCI6dHJ1ZSwiY2FuU3Vic2NyaWJlIjp0cnVlfSwiaWF0IjoxNjc4OTgyNDM3LCJuYmYiOjE2Nzg5ODI0MzcsImV4cCI6MTY3ODk4OTYzNywiaXNzIjoiQVBJa3pXaGJ4QmFHU2lxIiwic3ViIjoiU3RhcmsiLCJqdGkiOiJTdGFyayJ9.oqHyj1JlCdteX8QvA6igNHyUEOsG0NOVgpTBzv34ANI"
+  ); // hard coded for testing
   const createRoom = api.rooms.createRoom.useMutation();
   const router = useRouter();
   const join = () => {
@@ -32,6 +36,7 @@ function ConnectionTab() {
           placeholder="URL"
           className="rounded-lg"
           onChange={(ev) => setLiveKitUrl(ev.target.value)}
+          defaultValue={liveKitUrl}
         ></input>
 
         <label className="text-sm font-medium text-gray-400">Token</label>
@@ -40,6 +45,7 @@ function ConnectionTab() {
           placeholder="Token"
           className="rounded-lg"
           onChange={(ev) => setToken(ev.target.value)}
+          defaultValue={token}
         ></input>
       </div>
 
