@@ -1,12 +1,14 @@
+import { useMutation } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
 import { useState } from "react";
+import { api } from "~/utils/api";
 
 function ConnectionTab() {
   const [liveKitUrl, setLiveKitUrl] = useState<string | undefined>();
   const [token, setToken] = useState<string | undefined>();
-
+  const createRoom = api.rooms.createRoom.useMutation();
   const router = useRouter();
   const join = () => {
     router.push(`/custom/?liveKitUrl=${liveKitUrl}&token=${token}`);
@@ -18,6 +20,10 @@ function ConnectionTab() {
       <p className="text-sm text-gray-400">
         Multilingual Video Conferencing App
       </p>
+
+      <button onClick={() => createRoom.mutate()} className="lk-button">
+        Create Room
+      </button>
 
       <div className="flex flex-col space-y-1 rounded-lg border border-gray-400 p-5">
         <label className="text-sm font-medium text-gray-400">LiveKit URL</label>

@@ -18,7 +18,7 @@ import {
 import { TokenResult } from "~/lib/type";
 
 export const roomsRouter = createTRPCRouter({
-  createRoom: protectedProcedure
+  joinRoom: protectedProcedure
     .input(
       z.object({
         roomName: z.string(),
@@ -64,4 +64,33 @@ export const roomsRouter = createTRPCRouter({
 
       return result;
     }),
+  createRoom: protectedProcedure.mutation(({ ctx }) => {
+    const identity = ctx.session.user.id;
+    const name = ctx.session.user.name;
+    const roomName = Math.random().toString(36).substring(2, 6);
+    const grant: VideoGrant = {
+      room: roomName,
+      roomJoin: true,
+      canPublish: true,
+      canPublishData: true,
+      canSubscribe: true,
+    };
+    const token = createToken({ identity, name: name as string }, grant);
+    const result: TokenResult = {
+      identity,
+      accessToken: token,
+    };
+    const room = ctx.prisma.room.create({
+      data: {
+        name: roomName,
+        Owner: {
+          connect: {
+            id: ctx.session.user.id,
+          },
+        },
+        token: token,
+      },
+    });
+    return result;
+  }),
 });
