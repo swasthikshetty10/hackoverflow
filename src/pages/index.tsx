@@ -1,4 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import React from "react";
@@ -13,6 +12,7 @@ function ConnectionTab() {
   const join = () => {
     router.push(`/custom/?liveKitUrl=${liveKitUrl}&token=${token}`);
   };
+
   return (
     <div className="flex h-full w-full flex-col items-center justify-center space-y-4 p-4">
       <h1 className="text-4xl font-bold">Jab We Meet</h1>
