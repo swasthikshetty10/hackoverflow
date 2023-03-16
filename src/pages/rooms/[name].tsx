@@ -15,16 +15,19 @@ import { useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
 import { useServerUrl } from "../../lib/client-utils";
 import { api } from "~/utils/api";
+import { useSession } from "next-auth/react";
 
 // THis is join room page, provide room name to join as a participant
 
 const Home: NextPage = () => {
   const router = useRouter();
   const { name: roomName } = router.query;
-
+  const { data: session, status } = useSession();
   const [preJoinChoices, setPreJoinChoices] = useState<
     LocalUserChoices | undefined
   >(undefined);
+  if (status === "loading") return <div>Loading...</div>;
+  if (!session) router.push(`api/auth/signin?callbackUrl=/rooms/${roomName}`);
   return (
     <>
       <Head>
@@ -48,7 +51,7 @@ const Home: NextPage = () => {
                 console.log("error while setting up prejoin", err)
               }
               defaults={{
-                username: "",
+                username: session?.user.name as string,
                 videoEnabled: true,
                 audioEnabled: true,
               }}
@@ -105,7 +108,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
       {data && (
         <LiveKitRoom
           token={data.accessToken}
-          serverUrl={"https://transuii-q8v8i1ek.livekit.cloud"}
+          serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_API_HOST}
           options={roomOptions}
           video={userChoices.videoEnabled}
           audio={userChoices.audioEnabled}

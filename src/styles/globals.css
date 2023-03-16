@@ -5,3 +5,7 @@
 body {
   @apply bg-black;
 }
+
+.lk-username-container > #username {
+  @apply hidden;
+}

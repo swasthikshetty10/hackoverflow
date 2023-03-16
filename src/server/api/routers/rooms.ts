@@ -15,7 +15,7 @@ const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
 const roomPattern = /\w{4}\-\w{4}/;
 const apiKey = process.env.LIVEKIT_API_KEY;
 const apiSecret = process.env.LIVEKIT_API_SECRET;
-const apiHost = process.env.LIVEKIT_API_HOST as string;
+const apiHost = process.env.NEXT_PUBLIC_LIVEKIT_API_HOST as string;
 import {
   createTRPCRouter,
   publicProcedure,
@@ -78,8 +78,6 @@ export const roomsRouter = createTRPCRouter({
     const token = createToken({ identity, name: name as string }, grant);
     const result = {
       roomName: room.name,
-      identity,
-      accessToken: token,
     };
 
     return result;

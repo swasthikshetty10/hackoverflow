@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { api } from "~/utils/api";
 
@@ -16,6 +16,10 @@ function ConnectionTab() {
   const join = () => {
     router.push(`/custom/?liveKitUrl=${liveKitUrl}&token=${token}`);
   };
+  const createRoomHandler = async () => {
+    const data = await createRoom.mutateAsync();
+    router.push(`/rooms/${data.roomName}`);
+  };
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center space-y-4 p-4">
@@ -25,29 +29,9 @@ function ConnectionTab() {
         Multilingual Video Conferencing App
       </p>
 
-      <button onClick={() => createRoom.mutate()} className="lk-button">
+      <button onClick={createRoomHandler} className="lk-button">
         Create Room
       </button>
-
-      <div className="flex flex-col space-y-1 rounded-lg border border-gray-400 p-5">
-        <label className="text-sm font-medium text-gray-400">LiveKit URL</label>
-        <input
-          type="url"
-          placeholder="URL"
-          className="rounded-lg"
-          onChange={(ev) => setLiveKitUrl(ev.target.value)}
-          defaultValue={liveKitUrl}
-        ></input>
-
-        <label className="text-sm font-medium text-gray-400">Token</label>
-        <input
-          type="text"
-          placeholder="Token"
-          className="rounded-lg"
-          onChange={(ev) => setToken(ev.target.value)}
-          defaultValue={token}
-        ></input>
-      </div>
 
       <button className="lk-button" onClick={join}>
         Connect
