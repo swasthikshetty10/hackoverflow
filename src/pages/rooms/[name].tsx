@@ -17,6 +17,7 @@ import { signIn, useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 import useTranscribe from "~/hooks/useTranscribe";
 import Captions from "~/components/captions";
+import SplashScreen from "~/components/splashScreen";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
     LocalUserChoices | undefined
   >(undefined);
   const [selectedCode, setSelectedCode] = useState("en");
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading") return <SplashScreen />;
   if (!session) signIn("google");
 
   const languageCodes = [

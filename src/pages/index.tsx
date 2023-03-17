@@ -15,6 +15,7 @@ import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import TextAnimation from "~/components/animation/text";
 import Loader from "~/components/loader";
 import Footer from "~/components/footer";
+import SplashScreen from "~/components/splashScreen";
 
 function ConnectionTab() {
   const { data: session, status } = useSession();
@@ -42,7 +43,7 @@ function ConnectionTab() {
     }
   };
 
-  if (status === "loading") return <div>Loading...</div>;
+  if (status === "loading") return <SplashScreen />;
 
   return (
     <>

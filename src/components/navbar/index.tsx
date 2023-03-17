@@ -8,6 +8,7 @@ import { signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { FcGoogle } from "react-icons/fc";
 import PopAnimation from "../animation/pop";
+import Loader from "../loader";
 
 const Navbar = ({
   status,
@@ -100,13 +101,13 @@ const Navbar = ({
             <PopAnimation>
               <Link href="/profile">
                 {status === "loading" ? (
-                  <div>Loading...</div>
+                  <Loader />
                 ) : status === "authenticated" ? (
                   <Image
                     src={session?.user.image as string}
                     width={40}
                     height={40}
-                    className="cursor-pointer rounded-full hover:grayscale transition duration-300"
+                    className="cursor-pointer rounded-full transition duration-300 hover:grayscale"
                     alt="profile picture"
                   />
                 ) : null}
