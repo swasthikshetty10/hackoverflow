@@ -39,7 +39,6 @@ const Home: NextPage = () => {
       <main data-lk-theme="default">
         {roomName && !Array.isArray(roomName) && preJoinChoices ? (
           <ActiveRoom
-            userId={session?.user.id as string}
             roomName={roomName}
             userChoices={preJoinChoices}
             onLeave={() => setPreJoinChoices(undefined)}
@@ -76,15 +75,9 @@ type ActiveRoomProps = {
   roomName: string;
   region?: string;
   onLeave?: () => void;
-  userId: string;
 };
 
-const ActiveRoom = ({
-  roomName,
-  userChoices,
-  onLeave,
-  userId,
-}: ActiveRoomProps) => {
+const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
   const router = useRouter();
@@ -127,28 +120,17 @@ const ActiveRoom = ({
       isFinal: boolean;
     }[]
   >([]);
-<<<<<<< HEAD
-=======
-
->>>>>>> e4ddf32f05ae85d3ea9dd24ac032ed210a3e323e
-  useTranscribe({
-    roomName,
-    audioEnabled: userChoices.audioEnabled,
-  });
-<<<<<<< HEAD
-=======
-
->>>>>>> e4ddf32f05ae85d3ea9dd24ac032ed210a3e323e
+ useTranscribe({
+      roomName,
+      audioEnabled: userChoices.audioEnabled,
+    });
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
     });
 
-<<<<<<< HEAD
    
 
-=======
->>>>>>> e4ddf32f05ae85d3ea9dd24ac032ed210a3e323e
     const channel = pusher.subscribe(roomName);
     channel.bind(
       "transcribe-event",
@@ -158,7 +140,7 @@ const ActiveRoom = ({
         senderId: string;
         isFinal: boolean;
       }) {
-        if (data.isFinal && data.senderId !== userId) {
+        if (data.isFinal) {
           setTranscriptionQueue((prev) => {
             return [...prev, data];
           });
