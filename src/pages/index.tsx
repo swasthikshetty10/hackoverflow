@@ -12,6 +12,7 @@ import Image from "next/image";
 import Features from "~/components/features";
 import CharacterAnimation from "~/components/animation/character";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
+import TextAnimation from "~/components/animation/text";
 
 function ConnectionTab() {
   const { data: session, status } = useSession();
@@ -71,7 +72,7 @@ function ConnectionTab() {
           <div className="w-full max-w-md space-y-4">
             <Typing />
 
-            <CharacterAnimation
+            <TextAnimation
               className="flex justify-center"
               textStyle="text-sm text-gray-400"
               text="Multilingual Video Conferencing App"

@@ -27,6 +27,6 @@ body {
   flex-direction: row;
 }
 
-.animated-text {
+.gradient-text {
   @apply bg-gradient-to-r from-primary via-secondary to-tertiary bg-clip-text text-transparent;
 }
