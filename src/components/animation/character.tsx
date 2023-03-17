@@ -43,7 +43,7 @@ const CharacterAnimation: FC<{
     <motion.div
       ref={ref}
       className={className}
-      style={{ overflow: 'hidden', display: 'flex', fontSize: '2rem' }}
+      style={{ overflow: 'hidden', display: 'flex' }}
       variants={container}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}

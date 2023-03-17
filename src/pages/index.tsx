@@ -14,6 +14,7 @@ import CharacterAnimation from "~/components/animation/character";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import TextAnimation from "~/components/animation/text";
 import Loader from "~/components/loader";
+import Footer from "~/components/footer";
 
 function ConnectionTab() {
   const { data: session, status } = useSession();
@@ -86,7 +87,7 @@ function ConnectionTab() {
               text="Multilingual Video Conferencing App"
             />
 
-            <div className="flex flex-col items-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+            <div className="flex flex-col items-center justify-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
               <button onClick={createRoomHandler} className="lk-button h-fit">
                 {roomLoading ? (
                   <Loader />
@@ -111,6 +112,8 @@ function ConnectionTab() {
         </div>
 
         <Features />
+
+        <Footer />
 
         <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden opacity-80 blur-3xl sm:top-[calc(100%-30rem)]">
           <svg
