@@ -30,3 +30,11 @@ body {
 .gradient-text {
   @apply bg-gradient-to-r from-primary via-secondary to-tertiary bg-clip-text text-transparent;
 }
+
+.lk-join-button {
+  background: #6366f1!important;
+}
+
+.lk-join-button:hover {
+  background: #4f46e5!important;
+}

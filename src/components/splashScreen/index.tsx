@@ -14,10 +14,10 @@ const SplashScreen = () => {
       />
       <div className="flex flex-col items-center justify-center">
         <h1 className="gradient-text text-4xl font-bold">Jab We Meet</h1>
-        <p className="text-center text-gray-300">
+        <div className="text-center text-gray-300">
           Loading your experience...
           <Loader />
-        </p>
+        </div>
       </div>
     </div>
   );
