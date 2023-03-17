@@ -110,10 +110,15 @@ const Transcriptions = ({
   const pusherMutation = api.pusher.send.useMutation();
 
   useEffect(() => {
+    let isFinal = false;
     if (transcript != "") {
+      if (finalTranscript !== "") {
+        isFinal = true;
+      }
       pusherMutation.mutate({
         message: transcript,
         roomName: roomName,
+        isFinal: isFinal,
       });
     }
   }, [transcript, roomName]);
@@ -173,13 +178,15 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     channel.bind(
       "transcribe-event",
       function (data: { sender: string; message: string }) {
-        console.info("heree",data);
+        console.info("heree", data);
         setTranscripts((prev) =>
-         prev.find((t)=>t.sender === data.sender) ? prev.map((t) =>
-            t.sender === data.sender
-              ? { sender: data.sender, message: data.message }
-              : t
-          ) : [...prev, data]
+          prev.find((t) => t.sender === data.sender)
+            ? prev.map((t) =>
+                t.sender === data.sender
+                  ? { sender: data.sender, message: data.message }
+                  : t
+              )
+            : [...prev, data]
         );
       }
     );

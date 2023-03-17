@@ -11,6 +11,7 @@ export const pusherRouter = createTRPCRouter({
       z.object({
         message: string(),
         roomName: string(),
+        isFinal: z.boolean(),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -22,6 +23,8 @@ export const pusherRouter = createTRPCRouter({
         {
           message,
           sender: user.name,
+          isFinal: input.isFinal,
+          senderId: user.id,
         }
       );
       return response;
