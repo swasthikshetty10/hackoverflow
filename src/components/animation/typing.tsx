@@ -13,7 +13,7 @@ export default function Typing() {
         3000,
       ]}
       wrapper="h2"
-      className="text-3xl font-semibold  sm:text-3xl lg:text-4xl xl:text-5xl  2xl:text-6xl"
+      className="animated-text text-3xl font-semibold sm:text-3xl lg:text-3xl xl:text-5xl 2xl:text-6xl"
       repeat={Infinity}
     />
   );

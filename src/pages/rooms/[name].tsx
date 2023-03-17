@@ -29,7 +29,7 @@ const Home: NextPage = () => {
   >(undefined);
   const [selectedCode, setSelectedCode] = useState("en");
   if (status === "loading") return <div>Loading...</div>;
-  if (!session) router.push(`api/auth/signin?callbackUrl=/rooms/${roomName}`);
+  if (!session) router.push(`/api/auth/signin`);
 
   const languageCodes = [
     {
@@ -55,54 +55,47 @@ const Home: NextPage = () => {
   ];
 
   return (
-    <>
-      <Head>
-        <title>Jab We Meet</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main data-lk-theme="default">
-        {roomName && !Array.isArray(roomName) && preJoinChoices ? (
-          <ActiveRoom
-            roomName={roomName}
-            userChoices={preJoinChoices}
-            onLeave={() => setPreJoinChoices(undefined)}
-            userId={session?.user.id as string}
-            selectedLanguage={selectedCode}
-          ></ActiveRoom>
-        ) : (
-          <div className="flex h-fit flex-row items-center justify-center">
-            <PreJoin
-              onError={(err) =>
-                console.log("error while setting up prejoin", err)
-              }
-              defaults={{
-                username: session?.user.name as string,
-                videoEnabled: true,
-                audioEnabled: true,
-              }}
-              onSubmit={(values) => {
-                console.log("Joining with: ", values);
-                setPreJoinChoices(values);
-              }}
-            ></PreJoin>
-            <div className="flex flex-col items-start justify-center gap-3 rounded-lg border border-gray-300 p-5">
-              <label>
-                <span>Your Language</span>
-              </label>
-              <select
-                className="rounded-lg border border-gray-300 p-2"
-                onChange={(e) => setSelectedCode(e.target.value)}
-              >
-                {languageCodes.map((language) => (
-                  <option value={language.code}>{language.language}</option>
-                ))}
-              </select>
-            </div>
+    <main data-lk-theme="default">
+      {roomName && !Array.isArray(roomName) && preJoinChoices ? (
+        <ActiveRoom
+          roomName={roomName}
+          userChoices={preJoinChoices}
+          onLeave={() => setPreJoinChoices(undefined)}
+          userId={session?.user.id as string}
+          selectedLanguage={selectedCode}
+        ></ActiveRoom>
+      ) : (
+        <div className="flex h-fit flex-row items-center justify-center">
+          <PreJoin
+            onError={(err) =>
+              console.log("error while setting up prejoin", err)
+            }
+            defaults={{
+              username: session?.user.name as string,
+              videoEnabled: true,
+              audioEnabled: true,
+            }}
+            onSubmit={(values) => {
+              console.log("Joining with: ", values);
+              setPreJoinChoices(values);
+            }}
+          ></PreJoin>
+          <div className="flex flex-col items-start justify-center gap-3 rounded-lg border border-gray-300 p-5">
+            <label>
+              <span>Your Language</span>
+            </label>
+            <select
+              className="rounded-lg border border-gray-300 p-2"
+              onChange={(e) => setSelectedCode(e.target.value)}
+            >
+              {languageCodes.map((language) => (
+                <option value={language.code}>{language.language}</option>
+              ))}
+            </select>
           </div>
-        )}
-      </main>
-    </>
+        </div>
+      )}
+    </main>
   );
 };
 

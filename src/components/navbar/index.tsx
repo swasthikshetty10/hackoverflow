@@ -6,6 +6,7 @@ import { AiOutlineClose as XIcon } from "react-icons/ai";
 import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
+import { FcGoogle } from "react-icons/fc";
 
 const Navbar = ({
   status,
@@ -36,19 +37,12 @@ const Navbar = ({
   };
 
   return (
-    <nav className="top-0 z-10 w-full border-b border-gray-200 bg-white bg-opacity-10 backdrop-blur-lg backdrop-filter">
+    <nav className="fixed top-0 z-10 w-full border-b border-gray-400/20 bg-white bg-opacity-5 backdrop-blur-lg backdrop-filter">
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Image
-              className="rounded-full bg-white bg-opacity-30 p-1 backdrop-blur-lg backdrop-filter"
-              src="/favicon.ico"
-              alt="Logo"
-              width={40}
-              height={40}
-              priority
-            />
-            <span className={`font-bold text-white`}>Jab We Meet</span>
+            <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
+            <span className={`text-xl font-bold text-white`}>Jab We Meet</span>
           </Link>
 
           <div className="hidden space-x-6 text-white lg:flex lg:items-center">
@@ -65,7 +59,7 @@ const Navbar = ({
               </Link>
             ))}
             <button
-              className="rounded-md bg-white bg-opacity-30 p-2 text-white"
+              className="lk-button"
               onClick={() => {
                 if (status === "authenticated") {
                   signOut();
@@ -74,8 +68,18 @@ const Navbar = ({
                 }
               }}
             >
-              {status === "authenticated" ? "Sign Out" : "Sign In"}
+              {status === "authenticated" ? (
+                "Sign Out"
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <FcGoogle />
+                  <div>Sign In</div>
+                </div>
+              )}
             </button>
+            <select className="lk-button">
+              <option value="en">English</option>
+            </select>
           </div>
 
           <div className="flex items-center space-x-4 lg:hidden">
@@ -98,18 +102,23 @@ const Navbar = ({
                 {link.label}
               </Link>
             ))}
-            <button
-              className="w-fit rounded-md bg-white bg-opacity-30 p-2 text-white"
-              onClick={() => {
-                if (status === "authenticated") {
-                  signIn("google");
-                } else {
-                  signOut();
-                }
-              }}
-            >
-              {status === "authenticated" ? "Sign Out" : "Sign In"}
-            </button>
+            <div className="flex items-center space-x-4">
+              <button
+                className="lk-button"
+                onClick={() => {
+                  if (status === "authenticated") {
+                    signIn("google");
+                  } else {
+                    signOut();
+                  }
+                }}
+              >
+                {status === "authenticated" ? "Sign Out" : "Sign In"}
+              </button>
+              <select className="lk-button">
+                <option value="en">English</option>
+              </select>
+            </div>
           </div>
         )}
       </div>
