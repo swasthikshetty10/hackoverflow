@@ -27,8 +27,25 @@ const Home: NextPage = () => {
   const [preJoinChoices, setPreJoinChoices] = useState<
     LocalUserChoices | undefined
   >(undefined);
+  const [selectedCode, setSelectedCode] = useState("en");
   if (status === "loading") return <div>Loading...</div>;
   if (!session) router.push(`api/auth/signin?callbackUrl=/rooms/${roomName}`);
+
+  const languageCodes = [
+    {
+      language: "English",
+      code: "en",
+    },
+    {
+      language: "Hindi",
+      code: "hi",
+    },
+    {
+      language: "Japanese",
+      code: "ja",
+    },
+  ];
+
   return (
     <>
       <Head>
@@ -44,9 +61,7 @@ const Home: NextPage = () => {
             onLeave={() => setPreJoinChoices(undefined)}
           ></ActiveRoom>
         ) : (
-          <div
-            style={{ display: "grid", placeItems: "center", height: "100%" }}
-          >
+          <div className="flex h-fit flex-row items-center justify-center">
             <PreJoin
               onError={(err) =>
                 console.log("error while setting up prejoin", err)
@@ -61,6 +76,19 @@ const Home: NextPage = () => {
                 setPreJoinChoices(values);
               }}
             ></PreJoin>
+            <div className="flex flex-col items-start justify-center gap-3 rounded-lg border border-gray-300 p-5">
+              <label>
+                <span>Your Language</span>
+              </label>
+              <select
+                className="rounded-lg border border-gray-300 p-2"
+                onChange={(e) => setSelectedCode(e.target.value)}
+              >
+                {languageCodes.map((language) => (
+                  <option value={language.code}>{language.language}</option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
       </main>
