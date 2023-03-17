@@ -1,12 +1,27 @@
 import { transliterate } from 'transliteration';
 
+let lastSpokenText = '';
 
-const speakOut = async (text :string , lang? : string) => {
-    let speech = new SpeechSynthesisUtterance();
+const speakOut = async (text: string, isEmpty:boolean, lang?: string) => {
+  if (text === lastSpokenText) {
+    console.log('Skipping speaking text again:', text);
+    return;
+  }
 
-    speech.lang = "hi-IN";
-    let englishText = transliterate(text );
-    speech.text = englishText;
-    speechSynthesis.speak(speech);
-}
+  if(isEmpty) lastSpokenText=''
+
+  console.log('speakOut function called with text:', text);
+
+  let speech = new SpeechSynthesisUtterance();
+  speech.lang = 'hi-IN';
+
+  let englishText = transliterate(text);
+  speech.text = englishText;
+
+  console.log('SpeechSynthesisUtterance:', speech);
+  speechSynthesis.speak(speech);
+
+  lastSpokenText = text;
+};
+
 export default speakOut;

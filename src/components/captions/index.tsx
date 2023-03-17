@@ -17,6 +17,7 @@ interface Props {
   setTranscriptionQueue: Dispatch<SetStateAction<Transcription[]>>;
 }
 
+
 const Captions: React.FC<Props> = ({
   transcriptionQueue,
   setTranscriptionQueue,
@@ -33,7 +34,8 @@ const Captions: React.FC<Props> = ({
           message: res.text,
           sender: transcriptionQueue[0]?.sender as string,
         });
-        speakOut(res.text as string)
+        const isEmpty = transcriptionQueue.length === 0
+        speakOut(res.text as string,isEmpty )
         setTranscriptionQueue((prev) => prev.slice(1));
       }
     }
