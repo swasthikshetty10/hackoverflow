@@ -19,6 +19,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <title>Jab We Meet</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <Component {...pageProps} />
     </SessionProvider>
   );
