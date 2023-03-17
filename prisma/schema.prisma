@@ -98,7 +98,6 @@ model Transcript {
 }
 
 model Participant {
-  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   UserId    String
@@ -106,6 +105,7 @@ model Participant {
   RoomName  String
   Room      Room     @relation(fields: [RoomName], references: [name], onDelete: Cascade)
 
+  @@id([UserId, RoomName])
   @@index([UserId])
   @@index([RoomName])
 }
