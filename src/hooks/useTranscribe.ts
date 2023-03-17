@@ -38,7 +38,7 @@ const useTranscribe = ({ roomName, audioEnabled }: UseTranscribeProps) => {
 
   useEffect(() => {
     if (audioEnabled) {
-      SpeechRecognition.startListening({ continuous: true });
+      SpeechRecognition.startListening({ continuous: true});
     }
   }, [audioEnabled]);
 
