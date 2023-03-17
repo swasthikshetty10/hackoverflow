@@ -43,6 +43,18 @@ const Captions: React.FC<Props> = ({
       }
     }
     translateText();
+
+    // Hide the caption after 5 seconds
+    const timer = setTimeout(() => {
+      setCaption({
+        message: "",
+        sender: "",
+      });
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [transcriptionQueue]);
 
   return (
