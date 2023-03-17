@@ -59,6 +59,7 @@ const Home: NextPage = () => {
             roomName={roomName}
             userChoices={preJoinChoices}
             onLeave={() => setPreJoinChoices(undefined)}
+            userId={session?.user.id as string}
           ></ActiveRoom>
         ) : (
           <div className="flex h-fit flex-row items-center justify-center">
@@ -103,9 +104,10 @@ type ActiveRoomProps = {
   roomName: string;
   region?: string;
   onLeave?: () => void;
+  userId: string;
 };
 
-const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
+const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps) => {
   const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
   const router = useRouter();
@@ -166,7 +168,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
         senderId: string;
         isFinal: boolean;
       }) {
-        if (data.isFinal) {
+        if (data.isFinal && userId !== data.senderId) {
           setTranscriptionQueue((prev) => {
             return [...prev, data];
           });
