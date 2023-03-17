@@ -9,3 +9,20 @@ body {
 .lk-username-container > #username {
   @apply hidden;
 }
+
+.closed-captions-wrapper {
+    width: 100%;
+    position: absolute;
+    bottom: 20%;
+    display: flex;
+    justify-content: center;
+    z-index: 1;
+    font-size: 18px;
+}
+
+.closed-captions-container {
+    background: black;
+    color: white;
+    display: flex;
+    flex-direction: row;
+}

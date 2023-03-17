@@ -1,48 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { setCORS } from "google-translate-api-browser";
 
 const translate = setCORS("https://corsanywhere.herokuapp.com/");
 
-interface Props {
-  transcripts: {
-    sender: string;
-    message: string;
-  }[];
+type Transcription = {
+  sender: string;
+  message: string;
+  senderId: string;
   isFinal: boolean;
-  //   language: string;
+};
+
+interface Props {
+  transcriptionQueue: Transcription[];
+  setTranscriptionQueue: Dispatch<SetStateAction<Transcription[]>>;
 }
 
 const Captions: React.FC<Props> = ({
-  transcripts,
-  isFinal,
-  // , language
+  transcriptionQueue,
+  setTranscriptionQueue,
 }) => {
-  const [caption, setCaption] = useState<string>("");
+  const [caption, setCaption] = useState<{ sender: string; message: string }>();
 
   useEffect(() => {
-    const lastMessage = transcripts[transcripts.length - 1];
-    if (lastMessage) {
-      //   translate(lastMessage.message, { to: language })
-      translate(lastMessage.message, { to: "en" })
-        .then((res) => {
-          setCaption(`${lastMessage.sender}: ${res.text}`);
-        })
-        .catch((err) => {
-          console.error(err);
+    async function translateText() {
+      if (transcriptionQueue.length > 0) {
+        const res = await translate(transcriptionQueue[0]?.message as string, {
+          to: "hi",
         });
+        setCaption({
+          message: res.text,
+          sender: transcriptionQueue[0]?.sender as string,
+        });
+        setTranscriptionQueue((prev) => prev.slice(1));
+      }
     }
 
-    if (isFinal) {
-        setCaption("");
-    }
-  }, [
-    transcripts,
-    // , language
-  ]);
+    translateText();
+  }, [transcriptionQueue]);
 
   return (
-    <div className="absolute bottom-0 bg-gray-800 p-2 text-white">
-      <p>{caption}</p>
+    <div className="closed-captions-wrapper">
+      <div className="closed-captions-container">
+        {caption?.message ? (
+          <>
+            <div className="closed-captions-username">{caption.sender}</div>
+            <span>:&nbsp;</span>
+          </>
+        ) : null}
+        <div className="closed-captions-text">{caption?.message}</div>
+      </div>
     </div>
   );
 };

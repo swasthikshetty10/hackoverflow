@@ -112,16 +112,39 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     }[]
   >([]);
 
+  const [transcriptionQueue, setTranscriptionQueue] = useState<
+    {
+      sender: string;
+      message: string;
+      senderId: string;
+      isFinal: boolean;
+    }[]
+  >([]);
+
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
       cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER as string,
     });
 
+    useTranscribe({
+      roomName,
+      audioEnabled: userChoices.audioEnabled,
+    });
+
     const channel = pusher.subscribe(roomName);
     channel.bind(
       "transcribe-event",
-      function (data: { sender: string; message: string }) {
-        console.info("heree", data);
+      function (data: {
+        sender: string;
+        message: string;
+        senderId: string;
+        isFinal: boolean;
+      }) {
+        if (data.isFinal) {
+          setTranscriptionQueue((prev) => {
+            return [...prev, data];
+          });
+        }
         setTranscripts((prev) =>
           prev.find((t) => t.sender === data.sender)
             ? prev.map((t) =>
@@ -135,11 +158,6 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     );
   }, []);
 
-  const { isFinal } = useTranscribe({
-    roomName,
-    audioEnabled: userChoices.audioEnabled,
-  });
-
   return (
     <>
       {data && (
@@ -151,7 +169,10 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
         >
-          <Captions transcripts={transcripts} isFinal={isFinal} />
+          <Captions
+            transcriptionQueue={transcriptionQueue}
+            setTranscriptionQueue={setTranscriptionQueue}
+          />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
