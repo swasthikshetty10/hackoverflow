@@ -55,18 +55,37 @@ const Home: NextPage = () => {
   return (
     <main data-lk-theme="default">
       {roomName && !Array.isArray(roomName) && preJoinChoices ? (
-        <ActiveRoom
-          roomName={roomName}
-          userChoices={preJoinChoices}
-          onLeave={() => setPreJoinChoices(undefined)}
-          userId={session?.user.id as string}
-          selectedLanguage={selectedCode}
-        ></ActiveRoom>
+        <>
+          <ActiveRoom
+            roomName={roomName}
+            userChoices={preJoinChoices}
+            onLeave={() => setPreJoinChoices(undefined)}
+            userId={session?.user.id as string}
+            selectedLanguage={selectedCode}
+          ></ActiveRoom>
+          <div className="lk-prejoin"
+          style={{
+            width: "100%",
+          }}
+          >
+            <select
+              className="lk-button"
+              onChange={(e) => setSelectedCode(e.target.value)}
+            >
+              {languageCodes.map((language) => (
+                <option value={language.code}>{language.language}</option>
+              ))}
+            </select>
+          </div>
+        </>
       ) : (
         <div className="flex h-screen flex-col items-center justify-center">
           <div className="lk-prejoin flex flex-col gap-3">
             <div className="text-2xl font-bold">Hey, {session?.user.name}!</div>
-            <div className="text-sm font-normal">You are joining <span className="font-semibold gradient-text">{roomName}</span></div>
+            <div className="text-sm font-normal">
+              You are joining{" "}
+              <span className="gradient-text font-semibold">{roomName}</span>
+            </div>
             <label>
               <span>Choose your Language</span>
             </label>
@@ -178,6 +197,10 @@ const ActiveRoom = ({
         }
       }
     );
+
+    return () => {
+      pusher.unsubscribe(roomName);
+    }
   }, []);
 
   return (
