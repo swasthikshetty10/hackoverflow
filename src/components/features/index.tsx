@@ -62,7 +62,10 @@ const Features = () => {
   ];
 
   return (
-    <section className="bg-white text-black transition-colors duration-500">
+    <section
+      id="about"
+      className="bg-gray-900/10 text-white transition-colors duration-500"
+    >
       <svg width="0" height="0">
         <linearGradient id="gradient" x1="100%" y1="100%" x2="0%" y2="0%">
           <stop stopColor="#6366f1" offset="0%" />
@@ -89,13 +92,11 @@ const Features = () => {
               >
                 <PopAnimation>{perk.icon}</PopAnimation>
                 <TextAnimation
-                  textStyle="text-xl font-bold text-black dark:text-white"
+                  textStyle="text-xl font-bold text-white"
                   text={perk.title}
                   className="mt-4"
                 />
-                <p className="mt-1 text-sm text-gray-600 dark:text-gray-200">
-                  {perk.desc}
-                </p>
+                <p className="mt-1 text-sm text-gray-200">{perk.desc}</p>
               </a>
             ))}
           </div>

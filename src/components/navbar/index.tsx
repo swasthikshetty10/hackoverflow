@@ -20,15 +20,15 @@ const Navbar = ({
   const links = [
     {
       label: "Home",
-      path: "/",
+      path: "#",
     },
     {
       label: "About",
-      path: "/about",
+      path: "#about",
     },
     {
       label: "Contact",
-      path: "/contact",
+      path: "#contact",
     },
   ];
 
@@ -152,6 +152,21 @@ const Navbar = ({
                 <option value="en">English</option>
               </select>
             </div>
+            <PopAnimation>
+              <Link href="/profile">
+                {status === "loading" ? (
+                  <Loader />
+                ) : status === "authenticated" ? (
+                  <Image
+                    src={session?.user.image as string}
+                    width={40}
+                    height={40}
+                    className="cursor-pointer rounded-full transition duration-300 hover:grayscale"
+                    alt="profile picture"
+                  />
+                ) : null}
+              </Link>
+            </PopAnimation>
           </div>
         )}
       </div>

@@ -7,19 +7,19 @@ const Footer = () => {
   const links = [
     {
       label: "Home",
-      path: "/",
+      path: "#",
     },
     {
       label: "About",
-      path: "/about",
+      path: "#about",
     },
     {
       label: "Contact",
-      path: "/contact",
+      path: "#contact",
     },
   ];
   return (
-    <footer className="bg-gray-900">
+    <footer id="contact" className="bg-gray-900">
       <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8">
         <PopAnimation className="flex justify-center text-primary">
           <Image
