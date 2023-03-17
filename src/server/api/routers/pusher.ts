@@ -1,5 +1,7 @@
 import { string, z } from "zod";
 import { pusher } from "~/utils/pusher";
+import { setCORS } from "google-translate-api-browser";
+const translate = setCORS("https://cors-anywhere.herokuapp.com/");
 import {
   createTRPCRouter,
   publicProcedure,
@@ -27,14 +29,17 @@ export const pusherRouter = createTRPCRouter({
           senderId: user.id,
         }
       );
-      ctx.prisma.room.update({
+      const translated = await translate(message, {
+        to: "en",
+      });
+      await ctx.prisma.room.update({
         where: {
           name: input.roomName,
         },
         data: {
           transcripts: {
             create: {
-              text: message,
+              text: translated.text,
               UserId: user.id,
             },
           },
