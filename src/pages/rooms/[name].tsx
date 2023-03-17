@@ -17,6 +17,7 @@ import Pusher from "pusher-js";
 import useTranscribe from "~/hooks/useTranscribe";
 import Captions from "~/components/captions";
 import SplashScreen from "~/components/splashScreen";
+import { AiFillSetting } from "react-icons/ai";
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -63,19 +64,27 @@ const Home: NextPage = () => {
             userId={session?.user.id as string}
             selectedLanguage={selectedCode}
           ></ActiveRoom>
-          <div className="lk-prejoin"
-          style={{
-            width: "100%",
-          }}
+          <div
+            className="lk-prejoin"
+            style={{
+              width: "100%",
+            }}
           >
-            <select
-              className="lk-button"
-              onChange={(e) => setSelectedCode(e.target.value)}
-            >
-              {languageCodes.map((language) => (
-                <option value={language.code}>{language.language}</option>
-              ))}
-            </select>
+            <label className="flex items-center justify-center gap-2">
+              <span className="flex items-center space-x-2 text-center text-xs lg:text-sm">
+                <AiFillSetting />
+                <a>Switch Language</a>
+              </span>
+              <select
+                className="lk-button"
+                onChange={(e) => setSelectedCode(e.target.value)}
+                defaultValue={selectedCode}
+              >
+                {languageCodes.map((language) => (
+                  <option value={language.code}>{language.language}</option>
+                ))}
+              </select>
+            </label>
           </div>
         </>
       ) : (
@@ -100,7 +109,7 @@ const Home: NextPage = () => {
           </div>
           <PreJoin
             onError={(err) =>
-              console.log("error while setting up prejoin", err)
+              console.log("Error while setting up prejoin", err)
             }
             defaults={{
               username: session?.user.name as string,
@@ -200,7 +209,7 @@ const ActiveRoom = ({
 
     return () => {
       pusher.unsubscribe(roomName);
-    }
+    };
   }, []);
 
   return (
