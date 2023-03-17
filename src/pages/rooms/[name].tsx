@@ -20,6 +20,7 @@ import { useServerUrl } from "../../lib/client-utils";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
+import useTranscribe from "~/hooks/useTranscribe";
 
 // THis is join room page, provide room name to join as a participant
 
@@ -80,60 +81,6 @@ type ActiveRoomProps = {
   onLeave?: () => void;
 };
 
-const Transcriptions = ({
-  audioEnabled,
-  roomName,
-}: {
-  audioEnabled: boolean;
-  roomName: string;
-}) => {
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    finalTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
-
-  useEffect(() => {
-    if (finalTranscript !== "") {
-      resetTranscript();
-    }
-  }, [finalTranscript, resetTranscript]);
-
-  useEffect(() => {
-    if (audioEnabled) {
-      SpeechRecognition.startListening({ continuous: true });
-    }
-  }, [audioEnabled]);
-
-  const pusherMutation = api.pusher.send.useMutation();
-
-  useEffect(() => {
-    let isFinal = false;
-    if (transcript != "") {
-      if (finalTranscript !== "") {
-        isFinal = true;
-      }
-      pusherMutation.mutate({
-        message: transcript,
-        roomName: roomName,
-        isFinal: isFinal,
-      });
-    }
-  }, [transcript, roomName]);
-
-  if (!browserSupportsSpeechRecognition || !audioEnabled) {
-    return null;
-  }
-
-  return (
-    <div className="bg-black p-4 text-center">
-      <a>{transcript}</a>
-    </div>
-  );
-};
-
 const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
   const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
@@ -192,6 +139,11 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     );
   }, []);
 
+  const transcribe = useTranscribe({
+    roomName,
+    audioEnabled: userChoices.audioEnabled,
+  });
+
   return (
     <>
       {data && (
@@ -203,10 +155,6 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
         >
-          <Transcriptions
-            roomName={roomName}
-            audioEnabled={userChoices.audioEnabled}
-          />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
