@@ -8,6 +8,8 @@ import { api } from "~/utils/api";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import JoinRoom from "~/components/join";
 import Image from "next/image";
+import Features from "~/components/features";
+import CharacterAnimation from "~/components/animation/character";
 
 function ConnectionTab() {
   const { data: session, status } = useSession();
@@ -25,7 +27,7 @@ function ConnectionTab() {
     <>
       <Navbar status={status} session={session} />
       <div className="isolate flex h-screen w-screen flex-col items-center justify-center space-y-4 p-5 text-center md:flex-row">
-        <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem] opacity-60">
+        <div className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden opacity-60 blur-3xl sm:top-[-20rem]">
           <svg
             className="relative left-[calc(50%-11rem)] -z-10 h-[21.1875rem] max-w-none -translate-x-1/2 rotate-[30deg] sm:left-[calc(50%-30rem)] sm:h-[42.375rem]"
             viewBox="0 0 1155 678"
@@ -52,22 +54,26 @@ function ConnectionTab() {
             </defs>
           </svg>
         </div>
-        
+
         <div className="w-full max-w-md space-y-4">
           <Typing />
 
-          <p className="text-sm text-gray-400">
-            Multilingual Video Conferencing App
-          </p>
+          <CharacterAnimation
+            className="flex justify-center"
+            textStyle="text-sm text-gray-400"
+            text="Multilingual Video Conferencing App"
+          />
 
           <div className="flex flex-col items-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
             <button onClick={createRoomHandler} className="lk-button h-fit">
               <AiOutlineVideoCameraAdd />
-              Create Room
+              <CharacterAnimation text="Create Room" textStyle="text-sm" />
             </button>
 
             <JoinRoom />
           </div>
+
+          <Features />
         </div>
 
         <div className="flex w-full max-w-md items-center justify-center">
@@ -79,7 +85,7 @@ function ConnectionTab() {
             priority
           />
         </div>
-        <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)] opacity-60">
+        <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden opacity-60 blur-3xl sm:top-[calc(100%-30rem)]">
           <svg
             className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
             viewBox="0 0 1155 678"

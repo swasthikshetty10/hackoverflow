@@ -7,6 +7,7 @@ import { useState } from "react";
 import { signIn, signOut } from "next-auth/react";
 import { Session } from "next-auth";
 import { FcGoogle } from "react-icons/fc";
+import PopAnimation from "../animation/pop";
 
 const Navbar = ({
   status,
@@ -41,8 +42,19 @@ const Navbar = ({
       <div className="mx-auto max-w-5xl px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center space-x-2">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} priority />
-            <span className={`text-xl font-bold text-white`}>Jab We Meet</span>
+            <PopAnimation>
+              <Image
+                src="/logo.png"
+                alt="Logo"
+                width={40}
+                height={40}
+                priority
+              />
+            </PopAnimation>
+            <CharacterAnimation
+              text="Jab We Meet"
+              textStyle="text-xl font-bold text-white"
+            />
           </Link>
 
           <div className="hidden space-x-6 text-white lg:flex lg:items-center">
@@ -58,28 +70,32 @@ const Navbar = ({
                 />
               </Link>
             ))}
-            <button
-              className="lk-button"
-              onClick={() => {
-                if (status === "authenticated") {
-                  signOut();
-                } else {
-                  signIn("google");
-                }
-              }}
-            >
-              {status === "authenticated" ? (
-                "Sign Out"
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <FcGoogle />
-                  <div>Sign In</div>
-                </div>
-              )}
-            </button>
-            <select className="lk-button">
-              <option value="en">English</option>
-            </select>
+            <PopAnimation>
+              <button
+                className="lk-button"
+                onClick={() => {
+                  if (status === "authenticated") {
+                    signOut();
+                  } else {
+                    signIn("google");
+                  }
+                }}
+              >
+                {status === "authenticated" ? (
+                  "Sign Out"
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <FcGoogle />
+                    <div>Sign In</div>
+                  </div>
+                )}
+              </button>
+            </PopAnimation>
+            <PopAnimation>
+              <select className="lk-button">
+                <option value="en">English</option>
+              </select>
+            </PopAnimation>
           </div>
 
           <div className="flex items-center space-x-4 lg:hidden">

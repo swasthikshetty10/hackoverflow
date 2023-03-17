@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { BsKeyboard } from "react-icons/bs";
+import CharacterAnimation from "../animation/character";
 
 const JoinRoom = () => {
   const [roomName, setRoomName] = useState<string>("");
@@ -28,7 +29,7 @@ const JoinRoom = () => {
         }`}
         onClick={() => router.push(`/rooms/${roomName}`)}
       >
-        Join
+        <CharacterAnimation text="Join" textStyle="text-sm"/>
       </button>
     </div>
   );
