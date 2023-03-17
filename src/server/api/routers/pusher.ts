@@ -32,15 +32,17 @@ export const pusherRouter = createTRPCRouter({
       const translated = await translate(message, {
         to: "en",
       });
-      await ctx.prisma.room.update({
-        where: {
-          name: input.roomName,
-        },
+      await ctx.prisma.transcript.create({
         data: {
-          transcripts: {
-            create: {
-              text: translated.text,
-              UserId: user.id,
+          text: translated.text,
+          Room: {
+            connect: {
+              name: input.roomName,
+            },
+          },
+          User: {
+            connect: {
+              id: user.id,
             },
           },
         },

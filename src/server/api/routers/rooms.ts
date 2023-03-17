@@ -57,17 +57,16 @@ export const roomsRouter = createTRPCRouter({
       };
       try {
         // check if user is already in room
-        const participant = await ctx.prisma.participant.findFirst({
+        console.log("here");
+        const participant = await ctx.prisma.participant.findUnique({
           where: {
-            User: {
-              id: ctx.session.user.id,
-            },
-            Room: {
-              name: roomName,
+            UserId_RoomName: {
+              UserId: ctx.session.user.id,
+              RoomName: roomName,
             },
           },
         });
-        if (!participant)
+        if (participant === null)
           await ctx.prisma.participant.create({
             data: {
               User: {
@@ -130,9 +129,7 @@ export const roomsRouter = createTRPCRouter({
           {
             Participant: {
               some: {
-                User: {
-                  id: ctx.session.user.id,
-                },
+                UserId: ctx.session.user.id,
               },
             },
           },
