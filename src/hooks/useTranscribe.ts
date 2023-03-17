@@ -39,7 +39,7 @@ const useTranscribe = ({
     if (audioEnabled) {
       SpeechRecognition.startListening({
         continuous: true,
-        language: languageCode ? languageCode : "en-US",
+        language: languageCode,
       });
     }
   }, [audioEnabled]);

@@ -18,7 +18,6 @@ interface Props {
   languageCode: string;
 }
 
-
 const Captions: React.FC<Props> = ({
   transcriptionQueue,
   setTranscriptionQueue,
@@ -32,14 +31,14 @@ const Captions: React.FC<Props> = ({
       if (transcriptionQueue.length > 0) {
         const res = await translate(transcriptionQueue[0]?.message as string, {
           // @ts-ignore
-          to: languageCode,
+          to: languageCode.split("-")[0],
         });
         setCaption({
           message: res.text,
           sender: transcriptionQueue[0]?.sender as string,
         });
-        const isEmpty = transcriptionQueue.length === 0
-        speakOut(res.text as string,isEmpty )
+        const isEmpty = transcriptionQueue.length === 0;
+        speakOut(res.text as string, isEmpty);
         setTranscriptionQueue((prev) => prev.slice(1));
       }
     }

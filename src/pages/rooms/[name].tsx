@@ -34,15 +34,23 @@ const Home: NextPage = () => {
   const languageCodes = [
     {
       language: "English",
-      code: "en",
+      code: "en-US",
     },
     {
       language: "Hindi",
-      code: "hi",
+      code: "hi-IN",
     },
     {
       language: "Japanese",
-      code: "ja",
+      code: "ja-JP",
+    },
+    {
+      language: "French",
+      code: "fr-FR",
+    },
+    {
+      language: "Deutsch",
+      code: "de-DE",
     },
   ];
 

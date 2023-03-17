@@ -40,9 +40,7 @@ const Navbar = () => {
               height={40}
               priority
             />
-            <span className={` block font-bold text-white lg:hidden`}>
-              Incridea&apos;23
-            </span>
+            <span className={`font-bold text-white`}>Jab We Meet</span>
           </Link>
 
           <div className="hidden space-x-6 text-white lg:flex">
