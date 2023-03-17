@@ -12,7 +12,8 @@ const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   at.addGrant(grant);
   return at.toJwt();
 };
-const roomPattern = /\w{4}\-\w{4}/;
+import axios from "axios";
+
 const apiKey = process.env.LIVEKIT_API_KEY;
 const apiSecret = process.env.LIVEKIT_API_SECRET;
 const apiHost = process.env.NEXT_PUBLIC_LIVEKIT_API_HOST as string;
@@ -36,7 +37,7 @@ export const roomsRouter = createTRPCRouter({
         roomName: z.string(),
       })
     )
-    .query(({ input, ctx }) => {
+    .query(async ({ input, ctx }) => {
       const identity = ctx.session.user.id;
       const name = ctx.session.user.name;
 
@@ -55,7 +56,7 @@ export const roomsRouter = createTRPCRouter({
         accessToken: token,
       };
       try {
-        ctx.prisma.participant.create({
+        await ctx.prisma.participant.create({
           data: {
             User: {
               connect: {
@@ -150,20 +151,61 @@ export const roomsRouter = createTRPCRouter({
           createdAt: "asc",
         },
       });
-      const chatLog = transcripts
-        .map((transcript) => `${transcript.User.name} : ${transcript.text}`)
-        .join("\n");
-      const prompt = `generate a summarization of the transcript of a meeting conversation below in english:\n${chatLog}`;
-      const completion = await openai.createCompletion({
-        model: "text-davinci-002",
-        prompt: prompt,
-        temperature: 0.7,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-        max_tokens: 256,
-      });
-      console.log(completion);
-      return completion;
+      const chatLog = transcripts.map((transcript) => ({
+        speaker: transcript.User.name,
+        utterance: transcript.text,
+        timestamp: transcript.createdAt,
+      }));
+      if (chatLog.length === 0) {
+        return {
+          summary: "No summary available",
+          topics: [],
+          emotions: [],
+          numbers: [],
+          names: [],
+        };
+      }
+
+      const apiKey = process.env.ONEAI_API_KEY;
+
+      const config = {
+        method: "POST",
+        url: "https://api.oneai.com/api/v0/pipeline",
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        data: {
+          input: chatLog,
+          input_type: "conversation",
+          content_type: "application/json",
+          output_type: "json",
+          multilingual: {
+            enabled: true,
+          },
+          steps: [
+            {
+              skill: "article-topics",
+            },
+            {
+              skill: "numbers",
+            },
+            {
+              skill: "names",
+            },
+            {
+              skill: "emotions",
+            },
+            {
+              skill: "summarize",
+            },
+          ],
+        },
+      };
+
+      const res = await axios.request(config);
+      console.log(res.status);
+
+      return res.data;
     }),
 });

@@ -28,6 +28,7 @@
     "livekit-server-sdk": "^1.1.0",
     "next": "^13.2.1",
     "next-auth": "^4.19.0",
+    "nodejs-text-summarizer": "^2.0.3",
     "openai": "^3.2.1",
     "pusher": "^5.1.2",
     "pusher-js": "^8.0.1",

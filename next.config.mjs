@@ -20,8 +20,8 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  images:{
-    domains:['lh3.googleusercontent.com']
+  images: {
+    domains: ['lh3.googleusercontent.com']
   }
 };
 export default config;
