@@ -8,7 +8,6 @@ import {
 import { LogLevel, RoomOptions, VideoPresets } from "livekit-client";
 
 import type { NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
@@ -64,7 +63,22 @@ const Home: NextPage = () => {
           selectedLanguage={selectedCode}
         ></ActiveRoom>
       ) : (
-        <div className="flex h-fit flex-row items-center justify-center">
+        <div className="flex h-screen flex-col items-center justify-center">
+          <div className="lk-prejoin flex flex-col gap-3">
+            <div className="text-2xl font-bold">Hey, {session?.user.name}!</div>
+            <div className="text-sm font-normal">You are joining <span className="font-semibold gradient-text">{roomName}</span></div>
+            <label>
+              <span>Choose your Language</span>
+            </label>
+            <select
+              className="lk-button"
+              onChange={(e) => setSelectedCode(e.target.value)}
+            >
+              {languageCodes.map((language) => (
+                <option value={language.code}>{language.language}</option>
+              ))}
+            </select>
+          </div>
           <PreJoin
             onError={(err) =>
               console.log("error while setting up prejoin", err)
@@ -79,19 +93,6 @@ const Home: NextPage = () => {
               setPreJoinChoices(values);
             }}
           ></PreJoin>
-          <div className="flex flex-col items-start justify-center gap-3 rounded-lg border border-gray-300 p-5">
-            <label>
-              <span>Your Language</span>
-            </label>
-            <select
-              className="rounded-lg border border-gray-300 p-2"
-              onChange={(e) => setSelectedCode(e.target.value)}
-            >
-              {languageCodes.map((language) => (
-                <option value={language.code}>{language.language}</option>
-              ))}
-            </select>
-          </div>
         </div>
       )}
     </main>
