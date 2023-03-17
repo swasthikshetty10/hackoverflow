@@ -1,13 +1,10 @@
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { signIn, useSession } from "next-auth/react";
 
 function profile() {
   const { data: session, status } = useSession();
-  const router = useRouter();
 
   if (status === "loading") return <div>Loading...</div>;
-  if (!session && status === "unauthenticated")
-    return router.push("/api/auth/signin");
+  if (!session && status === "unauthenticated") return signIn("google");
 
   return <div className="flex"></div>;
 }

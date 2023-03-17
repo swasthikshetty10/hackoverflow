@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
 import { api } from "~/utils/api";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 import useTranscribe from "~/hooks/useTranscribe";
 import Captions from "~/components/captions";
@@ -27,7 +27,7 @@ const Home: NextPage = () => {
   >(undefined);
   const [selectedCode, setSelectedCode] = useState("en");
   if (status === "loading") return <div>Loading...</div>;
-  if (!session) router.push(`/api/auth/signin`);
+  if (!session) signIn("google");
 
   const languageCodes = [
     {

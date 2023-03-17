@@ -1,6 +1,6 @@
 // @refresh reset
 import type { NextPage } from "next";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 import Typing from "~/components/animation/typing";
@@ -13,6 +13,7 @@ import Features from "~/components/features";
 import CharacterAnimation from "~/components/animation/character";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import TextAnimation from "~/components/animation/text";
+import Loader from "~/components/loader";
 
 function ConnectionTab() {
   const { data: session, status } = useSession();
@@ -28,9 +29,16 @@ function ConnectionTab() {
       alignment: Alignment.Center,
     }),
   });
+
+  const [roomLoading, setRoomLoading] = React.useState(false);
   const createRoomHandler = async () => {
-    const data = await createRoom.mutateAsync();
-    router.push(`/rooms/${data.roomName}`);
+    if (status === "unauthenticated") signIn("google");
+    else {
+      setRoomLoading(true);
+      const data = await createRoom.mutateAsync();
+      setRoomLoading(false);
+      router.push(`/rooms/${data.roomName}`);
+    }
   };
 
   if (status === "loading") return <div>Loading...</div>;
@@ -80,11 +88,20 @@ function ConnectionTab() {
 
             <div className="flex flex-col items-center space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
               <button onClick={createRoomHandler} className="lk-button h-fit">
-                <AiOutlineVideoCameraAdd />
-                <CharacterAnimation text="Create Room" textStyle="text-sm" />
+                {roomLoading ? (
+                  <Loader />
+                ) : (
+                  <>
+                    <AiOutlineVideoCameraAdd />
+                    <CharacterAnimation
+                      text="Create Room"
+                      textStyle="text-sm"
+                    />
+                  </>
+                )}
               </button>
 
-              <JoinRoom />
+              {!roomLoading && <JoinRoom />}
             </div>
           </div>
 

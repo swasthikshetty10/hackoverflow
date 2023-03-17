@@ -60,7 +60,7 @@ const Navbar = ({
           <div className="hidden space-x-6 text-white lg:flex lg:items-center">
             {links.map((link) => (
               <Link
-                className="transition-colors duration-300 hover:text-white"
+                className="transition-colors duration-300 hover:text-gray-400"
                 key={link.path}
                 href={link.path}
               >
@@ -95,6 +95,22 @@ const Navbar = ({
               <select className="lk-button">
                 <option value="en">English</option>
               </select>
+            </PopAnimation>
+
+            <PopAnimation>
+              <Link href="/profile">
+                {status === "loading" ? (
+                  <div>Loading...</div>
+                ) : status === "authenticated" ? (
+                  <Image
+                    src={session?.user.image as string}
+                    width={40}
+                    height={40}
+                    className="cursor-pointer rounded-full hover:grayscale transition duration-300"
+                    alt="profile picture"
+                  />
+                ) : null}
+              </Link>
             </PopAnimation>
           </div>
 
