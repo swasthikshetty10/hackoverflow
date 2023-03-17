@@ -1,4 +1,4 @@
-import { transliterate } from 'transliteration';
+import { transliterate } from "transliteration";
 
 let lastSpokenText = '';
 
