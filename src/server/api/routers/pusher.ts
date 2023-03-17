@@ -6,6 +6,7 @@ import {
   publicProcedure,
   protectedProcedure,
 } from "~/server/api/trpc";
+import { translate } from "@vitalets/google-translate-api";
 export const pusherRouter = createTRPCRouter({
   send: protectedProcedure
     .input(
@@ -28,10 +29,12 @@ export const pusherRouter = createTRPCRouter({
           senderId: user.id,
         }
       );
-
+      const { text } = await translate(message, {
+        to: "en",
+      });
       await ctx.prisma.transcript.create({
         data: {
-          text: input.message,
+          text: text,
           Room: {
             connect: {
               name: input.roomName,

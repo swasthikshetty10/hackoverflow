@@ -5,6 +5,7 @@ import type {
   VideoGrant,
   CreateOptions,
 } from "livekit-server-sdk";
+import { translate } from "@vitalets/google-translate-api";
 
 const createToken = (userInfo: AccessTokenOptions, grant: VideoGrant) => {
   const at = new AccessToken(apiKey, apiSecret, userInfo);
@@ -163,7 +164,7 @@ export const roomsRouter = createTRPCRouter({
       const chatLog = transcripts.map((transcript) => ({
         speaker: transcript.User.name,
         utterance: transcript.text,
-        timestamp: transcript.createdAt,
+        timestamp: transcript.createdAt.toISOString(),
       }));
       if (chatLog.length === 0) {
         return {
@@ -176,45 +177,48 @@ export const roomsRouter = createTRPCRouter({
       }
 
       const apiKey = process.env.ONEAI_API_KEY;
-
-      const config = {
-        method: "POST",
-        url: "https://api.oneai.com/api/v0/pipeline",
-        headers: {
-          "api-key": apiKey,
-          "Content-Type": "application/json",
-        },
-        data: {
-          input: chatLog,
-          input_type: "conversation",
-          content_type: "application/json",
-          output_type: "json",
-          multilingual: {
-            enabled: true,
+      console.log(chatLog);
+      try {
+        const config = {
+          method: "POST",
+          url: "https://api.oneai.com/api/v0/pipeline",
+          headers: {
+            "api-key": apiKey,
+            "Content-Type": "application/json",
           },
-          steps: [
-            {
-              skill: "article-topics",
+          data: {
+            input: chatLog,
+            input_type: "conversation",
+            content_type: "application/json",
+            output_type: "json",
+            multilingual: {
+              enabled: true,
             },
-            {
-              skill: "numbers",
-            },
-            {
-              skill: "names",
-            },
-            {
-              skill: "emotions",
-            },
-            {
-              skill: "summarize",
-            },
-          ],
-        },
-      };
+            steps: [
+              {
+                skill: "article-topics",
+              },
+              {
+                skill: "numbers",
+              },
+              {
+                skill: "names",
+              },
+              {
+                skill: "emotions",
+              },
+              {
+                skill: "summarize",
+              },
+            ],
+          },
+        };
 
-      const res = await axios.request(config);
-      console.log(res.status);
-
-      return res.data;
+        const res = await axios.request(config);
+        console.log(res.status);
+        return res.data;
+      } catch (error) {
+        console.log(error);
+      }
     }),
 });
