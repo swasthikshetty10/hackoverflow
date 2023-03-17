@@ -25,9 +25,9 @@ const Captions: React.FC<Props> = ({
 
   useEffect(() => {
     async function translateText() {
-      if (transcriptionQueue.length > 0) {
+      if (transcriptionQueue.length > 0 ) {
         const res = await translate(transcriptionQueue[0]?.message as string, {
-          to: "hi",
+          to: "en",
         });
         setCaption({
           message: res.text,
@@ -37,7 +37,6 @@ const Captions: React.FC<Props> = ({
         setTranscriptionQueue((prev) => prev.slice(1));
       }
     }
-
     translateText();
   }, [transcriptionQueue]);
 
