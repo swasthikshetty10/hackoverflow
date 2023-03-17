@@ -1,5 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { setCORS } from "google-translate-api-browser";
+import speakOut from "~/utils/speak";
+import langs from "google-translate-api-browser/dist/languages";
 
 const translate = setCORS("https://corsanywhere.herokuapp.com/");
 
@@ -31,6 +33,7 @@ const Captions: React.FC<Props> = ({
           message: res.text,
           sender: transcriptionQueue[0]?.sender as string,
         });
+        speakOut(res.text as string)
         setTranscriptionQueue((prev) => prev.slice(1));
       }
     }
