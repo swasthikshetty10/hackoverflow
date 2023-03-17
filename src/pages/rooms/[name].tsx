@@ -60,6 +60,7 @@ const Home: NextPage = () => {
             userChoices={preJoinChoices}
             onLeave={() => setPreJoinChoices(undefined)}
             userId={session?.user.id as string}
+            selectedLanguage={selectedCode}
           ></ActiveRoom>
         ) : (
           <div className="flex h-fit flex-row items-center justify-center">
@@ -105,9 +106,16 @@ type ActiveRoomProps = {
   region?: string;
   onLeave?: () => void;
   userId: string;
+  selectedLanguage: string;
 };
 
-const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps) => {
+const ActiveRoom = ({
+  roomName,
+  userChoices,
+  onLeave,
+  userId,
+  selectedLanguage,
+}: ActiveRoomProps) => {
   const { data, error, isLoading } = api.rooms.joinRoom.useQuery({ roomName });
 
   const router = useRouter();
@@ -135,13 +143,6 @@ const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps)
     };
   }, [userChoices, hq]);
 
-  const [transcripts, setTranscripts] = useState<
-    {
-      sender: string;
-      message: string;
-    }[]
-  >([]);
-
   const [transcriptionQueue, setTranscriptionQueue] = useState<
     {
       sender: string;
@@ -153,6 +154,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps)
   useTranscribe({
     roomName,
     audioEnabled: userChoices.audioEnabled,
+    languageCode: selectedLanguage,
   });
   useEffect(() => {
     const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY as string, {
@@ -173,15 +175,6 @@ const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps)
             return [...prev, data];
           });
         }
-        setTranscripts((prev) =>
-          prev.find((t) => t.sender === data.sender)
-            ? prev.map((t) =>
-                t.sender === data.sender
-                  ? { sender: data.sender, message: data.message }
-                  : t
-              )
-            : [...prev, data]
-        );
       }
     );
   }, []);
@@ -200,6 +193,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave, userId }: ActiveRoomProps)
           <Captions
             transcriptionQueue={transcriptionQueue}
             setTranscriptionQueue={setTranscriptionQueue}
+            languageCode={selectedLanguage}
           />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />

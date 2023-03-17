@@ -7,9 +7,14 @@ import { api } from "~/utils/api";
 type UseTranscribeProps = {
   roomName: string;
   audioEnabled: boolean;
+  languageCode?: string;
 };
 
-const useTranscribe = ({ roomName, audioEnabled }: UseTranscribeProps) => {
+const useTranscribe = ({
+  roomName,
+  audioEnabled,
+  languageCode,
+}: UseTranscribeProps) => {
   const {
     transcript,
     resetTranscript,
@@ -27,18 +32,15 @@ const useTranscribe = ({ roomName, audioEnabled }: UseTranscribeProps) => {
         isFinal: true,
       });
       resetTranscript();
-    } else {
-      pusherMutation.mutate({
-        message: transcript,
-        roomName: roomName,
-        isFinal: false,
-      });
     }
-  }, [finalTranscript, resetTranscript, transcript, roomName]);
+  }, [finalTranscript]);
 
   useEffect(() => {
     if (audioEnabled) {
-      SpeechRecognition.startListening({ continuous: true});
+      SpeechRecognition.startListening({
+        continuous: true,
+        language: languageCode ? languageCode : "en-US",
+      });
     }
   }, [audioEnabled]);
 

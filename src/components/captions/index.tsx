@@ -15,26 +15,30 @@ type Transcription = {
 interface Props {
   transcriptionQueue: Transcription[];
   setTranscriptionQueue: Dispatch<SetStateAction<Transcription[]>>;
+  languageCode: string;
 }
 
 const Captions: React.FC<Props> = ({
   transcriptionQueue,
   setTranscriptionQueue,
+  languageCode,
 }) => {
   const [caption, setCaption] = useState<{ sender: string; message: string }>();
 
   useEffect(() => {
     async function translateText() {
-      if (transcriptionQueue.length > 0 ) {
+      console.info("transcriptionQueue", transcriptionQueue);
+      if (transcriptionQueue.length > 0) {
         const res = await translate(transcriptionQueue[0]?.message as string, {
-          to: "en",
+          // @ts-ignore
+          to: languageCode,
         });
         setCaption({
           message: res.text,
           sender: transcriptionQueue[0]?.sender as string,
         });
-        speakOut(res.text as string)
-        setTranscriptionQueue((prev) => prev.slice(1));
+        console.log("------------------\n", res.text, "\n------------------");
+        setTranscriptionQueue((prev) => [...prev.slice(1)]);
       }
     }
     translateText();
