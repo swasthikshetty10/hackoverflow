@@ -24,6 +24,11 @@ import {
 import { TokenResult } from "~/lib/type";
 import { CreateRoomRequest } from "livekit-server-sdk/dist/proto/livekit_room";
 const roomClient = new RoomServiceClient(apiHost, apiKey, apiSecret);
+const configuration = new Configuration({
+  apiKey: process.env.OPEN_API_SECRET,
+});
+import { Configuration, OpenAIApi } from "openai";
+const openai = new OpenAIApi(configuration);
 export const roomsRouter = createTRPCRouter({
   joinRoom: protectedProcedure
     .input(
@@ -124,4 +129,41 @@ export const roomsRouter = createTRPCRouter({
 
     return rooms;
   }),
+  getRoomSummary: protectedProcedure
+    .input(
+      z.object({
+        roomName: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      // order all transcripts by createdAt in ascending order
+      const transcripts = await ctx.prisma.transcript.findMany({
+        where: {
+          Room: {
+            name: input.roomName,
+          },
+        },
+        include: {
+          User: true,
+        },
+        orderBy: {
+          createdAt: "asc",
+        },
+      });
+      const chatLog = transcripts
+        .map((transcript) => `${transcript.User.name} : ${transcript.text}`)
+        .join("\n");
+      const prompt = `generate a summarization of the transcript of a meeting conversation below in english:\n${chatLog}`;
+      const completion = await openai.createCompletion({
+        model: "text-davinci-002",
+        prompt: prompt,
+        temperature: 0.7,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
+        max_tokens: 256,
+      });
+      console.log(completion);
+      return completion;
+    }),
 });
