@@ -27,6 +27,19 @@ export const pusherRouter = createTRPCRouter({
           senderId: user.id,
         }
       );
+      ctx.prisma.room.update({
+        where: {
+          name: input.roomName,
+        },
+        data: {
+          transcripts: {
+            create: {
+              text: message,
+              UserId: user.id,
+            },
+          },
+        },
+      });
       return response;
     }),
 });

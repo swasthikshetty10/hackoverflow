@@ -18,8 +18,6 @@ import Pusher from "pusher-js";
 import useTranscribe from "~/hooks/useTranscribe";
 import Captions from "~/components/captions";
 
-// THis is join room page, provide room name to join as a participant
-
 const Home: NextPage = () => {
   const router = useRouter();
   const { name: roomName } = router.query;

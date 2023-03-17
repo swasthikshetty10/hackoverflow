@@ -57,6 +57,7 @@ model User {
   sessions      Session[]
   Room          Room[]
   Participant   Participant[]
+  Transcript    Transcript[]
 }
 
 model VerificationToken {
@@ -72,12 +73,28 @@ model Room {
   updatedAt   DateTime      @updatedAt
   name        String        @id @unique @default(cuid())
   metadata    String?       @db.Text
+  slug        String?
   OwnerId     String
   Owner       User          @relation(fields: [OwnerId], references: [id], onDelete: Cascade)
   summary     String?       @db.Text
   Participant Participant[]
+  transcripts Transcript[]
 
   @@index([OwnerId])
+}
+
+model Transcript {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  RoomName  String
+  Room      Room     @relation(fields: [RoomName], references: [name], onDelete: Cascade)
+  text      String   @db.Text
+  UserId    String
+  User      User     @relation(fields: [UserId], references: [id], onDelete: Cascade)
+
+  @@index([RoomName])
+  @@index([UserId])
 }
 
 model Participant {
