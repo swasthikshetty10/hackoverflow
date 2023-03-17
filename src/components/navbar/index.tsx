@@ -4,8 +4,16 @@ import CharacterAnimation from "../animation/character";
 import { BiMenuAltRight as MenuIcon } from "react-icons/bi";
 import { AiOutlineClose as XIcon } from "react-icons/ai";
 import { useState } from "react";
+import { signIn, signOut } from "next-auth/react";
+import { Session } from "next-auth";
 
-const Navbar = () => {
+const Navbar = ({
+  status,
+  session,
+}: {
+  status: "loading" | "authenticated" | "unauthenticated";
+  session: Session | null;
+}) => {
   const links = [
     {
       label: "Home",
@@ -43,7 +51,7 @@ const Navbar = () => {
             <span className={`font-bold text-white`}>Jab We Meet</span>
           </Link>
 
-          <div className="hidden space-x-6 text-white lg:flex">
+          <div className="hidden space-x-6 text-white lg:flex lg:items-center">
             {links.map((link) => (
               <Link
                 className="transition-colors duration-300 hover:text-white"
@@ -56,7 +64,20 @@ const Navbar = () => {
                 />
               </Link>
             ))}
+            <button
+              className="rounded-md bg-white bg-opacity-30 p-2 text-white"
+              onClick={() => {
+                if (status === "authenticated") {
+                  signOut();
+                } else {
+                  signIn("google");
+                }
+              }}
+            >
+              {status === "authenticated" ? "Sign Out" : "Sign In"}
+            </button>
           </div>
+
           <div className="flex items-center space-x-4 lg:hidden">
             {isMenuOpen ? (
               <XIcon className="h-6 w-6 text-white" onClick={toggleMenu} />
@@ -67,7 +88,7 @@ const Navbar = () => {
         </div>
 
         {isMenuOpen && (
-          <div>
+          <div className="flex flex-col space-y-2 p-5 text-white lg:hidden">
             {links.map((link) => (
               <Link
                 key={link.path}
@@ -77,6 +98,18 @@ const Navbar = () => {
                 {link.label}
               </Link>
             ))}
+            <button
+              className="w-fit rounded-md bg-white bg-opacity-30 p-2 text-white"
+              onClick={() => {
+                if (status === "authenticated") {
+                  signIn("google");
+                } else {
+                  signOut();
+                }
+              }}
+            >
+              {status === "authenticated" ? "Sign Out" : "Sign In"}
+            </button>
           </div>
         )}
       </div>

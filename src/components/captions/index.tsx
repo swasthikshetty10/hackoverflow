@@ -58,7 +58,7 @@ const Captions: React.FC<Props> = ({
   }, [transcriptionQueue]);
 
   return (
-    <div className="closed-captions-wrapper">
+    <div className="closed-captions-wrapper z-50">
       <div className="closed-captions-container">
         {caption?.message ? (
           <>
