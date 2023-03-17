@@ -42,7 +42,7 @@ const useTranscribe = ({ roomName, audioEnabled }: UseTranscribeProps) => {
     }
   }, [audioEnabled]);
 
-  return null;
+  return { isFinal: finalTranscript !== "" };
 };
 
 export default useTranscribe;

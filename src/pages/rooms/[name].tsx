@@ -2,25 +2,21 @@ import {
   LiveKitRoom,
   PreJoin,
   LocalUserChoices,
-  useToken,
   VideoConference,
   formatChatMessageLinks,
 } from "@livekit/components-react";
 import { LogLevel, RoomOptions, VideoPresets } from "livekit-client";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { FC, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DebugMode } from "../../lib/Debug";
-import { useServerUrl } from "../../lib/client-utils";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
 import Pusher from "pusher-js";
 import useTranscribe from "~/hooks/useTranscribe";
+import Captions from "~/components/captions";
 
 // THis is join room page, provide room name to join as a participant
 
@@ -139,7 +135,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
     );
   }, []);
 
-  const transcribe = useTranscribe({
+  const { isFinal } = useTranscribe({
     roomName,
     audioEnabled: userChoices.audioEnabled,
   });
@@ -155,6 +151,7 @@ const ActiveRoom = ({ roomName, userChoices, onLeave }: ActiveRoomProps) => {
           audio={userChoices.audioEnabled}
           onDisconnected={onLeave}
         >
+          <Captions transcripts={transcripts} isFinal={isFinal} />
           <VideoConference chatMessageFormatter={formatChatMessageLinks} />
           <DebugMode logLevel={LogLevel.info} />
         </LiveKitRoom>
