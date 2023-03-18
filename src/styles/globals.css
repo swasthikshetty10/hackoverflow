@@ -32,9 +32,17 @@ body {
 }
 
 .lk-join-button {
-  background: #6366f1!important;
+  background: #6366f1 !important;
 }
 
 .lk-join-button:hover {
-  background: #4f46e5!important;
+  background: #4f46e5 !important;
+}
+.lk-video-conference {
+  @apply bg-black;
+}
+
+.lk-list,
+.lk-chat-form {
+  @apply bg-black;
 }

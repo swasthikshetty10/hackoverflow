@@ -1,4 +1,4 @@
-import { string, z } from "zod";
+import { nullable, string, z } from "zod";
 import { AccessToken, RoomServiceClient } from "livekit-server-sdk";
 import type {
   AccessTokenOptions,
@@ -168,11 +168,7 @@ export const roomsRouter = createTRPCRouter({
       }));
       if (chatLog.length === 0) {
         return {
-          summary: "No summary available",
-          topics: [],
-          emotions: [],
-          numbers: [],
-          names: [],
+          data: null,
         };
       }
 
