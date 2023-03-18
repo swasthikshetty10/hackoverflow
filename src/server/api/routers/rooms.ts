@@ -167,9 +167,7 @@ export const roomsRouter = createTRPCRouter({
         timestamp: transcript.createdAt.toISOString(),
       }));
       if (chatLog.length === 0) {
-        return {
-          data: null,
-        };
+        return null;
       }
 
       const apiKey = process.env.ONEAI_API_KEY;

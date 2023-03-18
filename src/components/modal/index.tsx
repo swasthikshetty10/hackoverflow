@@ -19,7 +19,7 @@ const Modal: FunctionComponent<ModalProps> = ({
   const { data, error, isLoading } = api.rooms.getRoomSummary.useQuery({
     roomName,
   });
-
+  console.log(data);
   // input array
   // output array-> contents [0].utterance
 
@@ -58,16 +58,23 @@ const Modal: FunctionComponent<ModalProps> = ({
                   as="h3"
                   className="gradient-text text-lg font-medium leading-6"
                 >
-                  Summary
+                  Meeting Details
                 </Dialog.Title>
-                <div className="mt-2">
-                  {isLoading && <Loader />}
-                  {data && (
+                <div className="">
+                  {isLoading ? (
+                    <Loader />
+                  ) : data ? (
                     <div className="text-sm text-gray-100 text-opacity-50">
-                      <Tabs
-                        summary={data.output[0].content[0].utterance}
-                        transcriptions={data.input}
-                      />
+                      {data.output[0].contents.length > 1 && (
+                        <Tabs
+                          summary={data.output[0].contents[1]?.utterance}
+                          transcriptions={data.input}
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-sm text-gray-100 text-opacity-50">
+                      No summary available
                     </div>
                   )}
                 </div>
