@@ -13,7 +13,8 @@ function Card({
     createdAt: Date;
   };
 }) {
-  const [modal, setModal] = useState(false);
+  let [isOpen, setIsOpen] = useState(false)
+
   return (
     <div className="m-4 flex flex-col items-center justify-center rounded-2xl bg-white bg-opacity-5 p-4 shadow-lg backdrop-blur-lg backdrop-filter hover:bg-opacity-10">
       <div key={room.name}>
@@ -36,18 +37,19 @@ function Card({
 
         <PopAnimation className="flex flex-row items-center justify-center">
           <button
-            onClick={() => setModal(true)}
+            onClick={() => setIsOpen(true)}
             className="mt-5 flex flex-row items-center justify-center space-x-2 rounded-lg bg-gray-100 bg-opacity-5 p-2 backdrop-blur-lg backdrop-filter hover:bg-gray-100 hover:bg-opacity-10"
           >
             <IoDocumentTextOutline
               className="text-2xl text-gray-100"
               size={15}
             />
-            <div>Summary</div>
+            <div>Details</div>
           </button>
         </PopAnimation>
-        {modal && (
-          <Modal roomName={room.name} onClose={() => setModal(false)}></Modal>
+
+        {isOpen && (
+          <Modal roomName={room.name} setIsOpen={setIsOpen} visible={isOpen} />
         )}
       </div>
     </div>
