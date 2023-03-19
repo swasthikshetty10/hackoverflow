@@ -1,5 +1,6 @@
 ![Social Cover - Jab We Meet](https://user-images.githubusercontent.com/83623339/226182317-55a21e48-8176-440e-b16c-93ea218748e2.png)
 [Live Demo](https://jabwemeet.vercel.app/) | [Pitch Deck](https://www.canva.com/design/DAFdhOPv1eA/qvB2ivAdB--1m9PxY-buWw/view?utm_content=DAFdhOPv1eA&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink) | [Hackoverflow 1.0](https://hack-overflow.tech/)
+
 # Jab We Meet
 Jab We Meet is a web application that allows users who speak different languages to converse with ease by translating the audio on the fly and speaking the translated audio in the native language of the user as well as provide them with translated captions. It also offers HD video and screen share, and can accommodate up to 100 concurrent users. The application also generates automatic meeting summaries and transcripts, making it easy for participants to review important details from the meeting.
 
@@ -13,7 +14,7 @@ Jab We Meet is a web application that allows users who speak different languages
 - Content creators & live streamers to reach global range audience.
 - Educational organizations to teach courses to multilingual students.
 
-## Built with:
+## Built with
 
 <p align="left">
 <img src="https://ui-lib.com/blog/wp-content/uploads/2021/12/nextjs-boilerplate-logo.png" height="50px">&nbsp; &nbsp; &nbsp;
@@ -27,7 +28,7 @@ Jab We Meet is a web application that allows users who speak different languages
 - [**Next JS**](https://nextjs.org/): React-based framework for building server-side rendered and statically exported web apps.
 - [**Typescript**](https://www.typescriptlang.org/): Statically typed superset of JavaScript, adds type annotations to enhance code reliability & readability
 - [**Livekit**](https://livekit.io/): End-to-end WebRTC infrastructure to build live video and audio applications.
-- [**Pusher**](https://pusher.com/): Pusher Channels is a hosted WebSockets solution for Realtime updates and bidirectional communication.
+- [**Pusher**](https://pusher.com/): WebSockets solution for Realtime updates and bidirectional communication.
 - [**TailwindCSS**](https://tailwindcss.com/): Utility-first CSS framework
 - [**Planetscale**](https://planetscale.com/): Highly scalable, globally distributed database
 - [**tRPC**](https://trpc.io/): Provides a simple, type-safe way to build APIs for TS & JS
@@ -86,11 +87,20 @@ npm run dev
   - Develop a learning model to predict the next moves of the speaker, which is a replacement for WebSpeech API's final transcription boolean.
 - As the app relies on browser's native Web Speech API for transcribing and tts, few browsers like Brave with known issues for this API and microphone functions tend to fail at running the app successfully.
 
+## Future scope of development
+- Use deepAI models to sync video/lip movements & translated audio.
+- Resemble the spoken audio(translated) to source audio(speaker) pitch.
+
 ## Team Members
 
 | <img src = "https://avatars.githubusercontent.com/u/83623339?v=4" width="50px"> | <img src = "https://avatars.githubusercontent.com/u/91735807?v=4" width="50px"> | <img src = "https://avatars.githubusercontent.com/u/74966490?v=4" width="50px"> |
 | :-----------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
 |              [Nagaraj Pandith](https://github.com/nagarajpandith/)              |  [Swasthik Shetty](<https://github.com/swasthikshetty10/](https://github.com/rudra246)>)  |                 [Tanishka Rao](https://github.com/tanishkarao16)                 |
+
+## License
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+This repository is licensed under [Apache License 2.0](https://github.com/swasthikshetty10/hackoverflow/blob/main/LICENSE)
 
 ## Attributions
 
