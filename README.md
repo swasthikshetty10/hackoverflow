@@ -1,28 +1,97 @@
-# Create T3 App
+![Social Cover - Jab We Meet](https://user-images.githubusercontent.com/83623339/226182317-55a21e48-8176-440e-b16c-93ea218748e2.png)
+[Live Demo](https://jabwemeet.vercel.app/) | [Pitch Deck](https://www.canva.com/design/DAFdhOPv1eA/qvB2ivAdB--1m9PxY-buWw/view?utm_content=DAFdhOPv1eA&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink) | [Hackoverflow 1.0](https://hack-overflow.tech/)
+# Jab We Meet
+Jab We Meet is a web application that allows users who speak different languages to converse with ease by translating the audio on the fly and speaking the translated audio in the native language of the user as well as provide them with translated captions. It also offers HD video and screen share, and can accommodate up to 100 concurrent users. The application also generates automatic meeting summaries and transcripts, making it easy for participants to review important details from the meeting.
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+> This is the Winning solution developed at 36-hour National Level hackathon called 'Hackoverflow 1.0' by PHCET, Navi Mumbai.
 
-## What's next? How do I make an app with this?
+![Jab We Meet - winners](https://user-images.githubusercontent.com/83623339/226183207-e8b0198f-c2af-4d1f-a518-0b61e6abab7a.png)
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+## Use cases
+- Startups and MNCs with international work culture.
+- Freelancers with daily foreign communication.
+- Content creators & live streamers to reach global range audience.
+- Educational organizations to teach courses to multilingual students.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Built with:
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+<p align="left">
+<img src="https://ui-lib.com/blog/wp-content/uploads/2021/12/nextjs-boilerplate-logo.png" height="50px">&nbsp; &nbsp; &nbsp;
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/1024px-Typescript_logo_2020.svg.png?20221110153201" height="50px">&nbsp; &nbsp; &nbsp;
+<img src="https://pbs.twimg.com/profile_images/1526251266862505985/KlWqqTp1_400x400.png" height="50px">&nbsp; &nbsp; &nbsp;
+<img src="https://pbs.twimg.com/profile_images/1504919223168077836/RSsCSpKf_400x400.jpg" height="50px">&nbsp; &nbsp; &nbsp;
+<img src="https://trpc.io/img/logo.svg" height="50px">&nbsp; &nbsp; &nbsp;
+<img src="https://www.svgrepo.com/show/374002/prisma.svg" height="50px">
+</p>
 
-## Learn More
+- [**Next JS**](https://nextjs.org/): React-based framework for building server-side rendered and statically exported web apps.
+- [**Typescript**](https://www.typescriptlang.org/): Statically typed superset of JavaScript, adds type annotations to enhance code reliability & readability
+- [**Livekit**](https://livekit.io/): End-to-end WebRTC infrastructure to build live video and audio applications.
+- [**Pusher**](https://pusher.com/): Pusher Channels is a hosted WebSockets solution for Realtime updates and bidirectional communication.
+- [**TailwindCSS**](https://tailwindcss.com/): Utility-first CSS framework
+- [**Planetscale**](https://planetscale.com/): Highly scalable, globally distributed database
+- [**tRPC**](https://trpc.io/): Provides a simple, type-safe way to build APIs for TS & JS
+- [**Prisma ORM**](https://www.prisma.io/): Modern, type-safe ORM for Node.js and TS
+- **APIs used**: Browser's [Webspeech](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API) API for transcribing and tts/speech synthesis. [Google-translate-browser](https://www.npmjs.com/package/google-translate-api-browser) API for translating texts, OneAI's [Summarizer](https://www.oneai.com/summarize) for summarizations of meeting transcripts.
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+> **Note**
+> This project was bootstrapped with [create-t3-app](https://create.t3.gg/). Check [package.json](https://github.com/swasthikshetty10/hackoverflow/blob/main/package.json) to know all the dependencies and tech stack we used.
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## Features
+- Multilingual Meeting Support
+- Real-time Translation and Transcriptions
+- Automatic Meeting Minutes generation
+- Support to upto 100 concurrent users
+- Supports HQ Video streaming
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Architecture
+<img width="1073" alt="Screenshot 2023-03-18 at 11 09 44 AM" src="https://user-images.githubusercontent.com/83623339/226187854-03ec9559-1122-42a3-93c7-80614fdae396.png">
 
-## How do I deploy this?
+## Installation steps
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+1. - Fork the [repo](https://github.com/swasthikshetty10/hackoverflow)
+   - Clone the repo to your local system `git clone https://github.com/swasthikshetty10/hackoverflow.git`
+   - Change current directory `cd hackoverflow`
+2. Install latest version of [Nodejs](https://nodejs.org/en/) and install all the dependencies:
+
+```bash
+npm install
+```
+
+3. Generate prisma client
+
+```bash
+npx prisma generate
+```
+
+4. Copy and Rename the .env.example to .env, place it in the root directory and fill the essential vars.
+
+```bash
+cp .env.example .env
+```
+
+> **Warning**
+> Do not rename the original .env.example, it is used to keep track for env vars list as .env with values is gitignored
+
+5. Run the development server:
+
+```bash
+npm run dev
+```
+
+## Known Issues
+- There is latency of around 5-6 seconds between the original time and the time when translated audio is spoken out. The latency issue can be tackled by following ways:
+  - Use native models for faster transcriptions
+  - Use paid APIs for quicker translations like Whisper AI, Google translate etc.
+  - Develop a learning model to predict the next moves of the speaker, which is a replacement for WebSpeech API's final transcription boolean.
+- As the app relies on browser's native Web Speech API for transcribing and tts, few browsers like Brave with known issues for this API and microphone functions tend to fail at running the app successfully.
+
+## Team Members
+
+| <img src = "https://avatars.githubusercontent.com/u/83623339?v=4" width="50px"> | <img src = "https://avatars.githubusercontent.com/u/91735807?v=4" width="50px"> | <img src = "https://avatars.githubusercontent.com/u/74966490?v=4" width="50px"> |
+| :-----------------------------------------------------------------------------: | :-----------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
+|              [Nagaraj Pandith](https://github.com/nagarajpandith/)              |  [Swasthik Shetty](<https://github.com/swasthikshetty10/](https://github.com/rudra246)>)  |                 [Tanishka Rao](https://github.com/tanishkarao16)                 |
+
+## Attributions
+
+- [Icon from - Flaticon](https://www.flaticon.com/free-icons/)
